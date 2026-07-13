@@ -611,7 +611,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const keyVal = btn.dataset.key;
       
       // 特殊キーは常に有効
-      if (keyVal === "backspace" || keyVal === "clear" || keyVal === "next") {
+      if (keyVal === "backspace" || keyVal === "clear") {
         btn.disabled = false;
         return;
       }
@@ -676,9 +676,6 @@ document.addEventListener("DOMContentLoaded", function() {
       } else if (key === "clear") {
         // すべて消去
         input.value = "";
-      } else if (key === "next") {
-        // 次の入力フィールドへフォーカス移動
-        focusNextInput();
       } else {
         // 文字入力 (数字、マイナス、カンマ、ドットなど)
         input.value = val.substring(0, start) + key + val.substring(end);
@@ -691,19 +688,6 @@ document.addEventListener("DOMContentLoaded", function() {
       input.focus();
     });
   });
-
-  // 次のインプットにフォーカスを移す
-  function focusNextInput() {
-    const inputs = Array.from(elements.dynamicInputArea.querySelectorAll("input.math-input, select.math-select"));
-    const currentIndex = inputs.indexOf(state.activeInput);
-    
-    if (currentIndex !== -1 && currentIndex < inputs.length - 1) {
-      inputs[currentIndex + 1].focus();
-    } else {
-      // 最後ならフォーカスを外してテンキーを閉じる
-      closeTenkey();
-    }
-  }
 
   // ==========================================
   // 8. 答え合わせ・解説表示
