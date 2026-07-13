@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html class="light" lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>高校数学Ⅰ 個別最適化学習 | Universal Math I</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<!-- KaTeX -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "secondary-fixed-dim": "#ffb77b",
+          "surface-bright": "#f3faff",
+          "secondary-container": "#ff8f06",
+          "surface-dim": "#c7dde9",
+          "tertiary": "#006b1b",
+          "on-primary-fixed": "#001c38",
+          "surface-container-highest": "#cfe6f2",
+          "inverse-on-surface": "#dff4ff",
+          "on-tertiary-fixed": "#002204",
+          "outline": "#707783",
+          "on-secondary-fixed": "#2e1500",
+          "on-background": "#071e27",
+          "secondary-fixed": "#ffdcc2",
+          "primary-fixed-dim": "#a2c9ff",
+          "tertiary-container": "#268630",
+          "on-error": "#ffffff",
+          "tertiary-fixed-dim": "#7ddc7a",
+          "background": "#f3faff",
+          "on-tertiary-container": "#f7fff1",
+          "on-surface-variant": "#404752",
+          "on-secondary-fixed-variant": "#6d3a00",
+          "on-primary-container": "#fdfcff",
+          "on-primary-fixed-variant": "#004881",
+          "on-primary": "#ffffff",
+          "primary-fixed": "#d3e4ff",
+          "primary-container": "#0077ce",
+          "surface-container": "#dbf1fe",
+          "surface-variant": "#cfe6f2",
+          "inverse-surface": "#1e333c",
+          "on-secondary-container": "#623300",
+          "surface-container-low": "#e6f6ff",
+          "surface": "#f3faff",
+          "on-tertiary": "#ffffff",
+          "on-secondary": "#ffffff",
+          "inverse-primary": "#a2c9ff",
+          "tertiary-fixed": "#98f994",
+          "surface-container-lowest": "#ffffff",
+          "on-surface": "#071e27",
+          "error": "#ba1a1a",
+          "outline-variant": "#c0c7d4",
+          "surface-tint": "#0060a8",
+          "error-container": "#ffdad6",
+          "on-error-container": "#93000a",
+          "secondary": "#8f4e00",
+          "primary": "#005ea4",
+          "on-tertiary-fixed-variant": "#005313",
+          "surface-container-high": "#d5ecf8"
+        },
+        borderRadius: {
+          DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"
+        },
+        spacing: {
+          "margin-desktop": "48px", "stack-sm": "8px", "stack-lg": "32px",
+          "touch-target-min": "50px", "margin-mobile": "16px", "gutter": "24px", "stack-md": "16px"
+        },
+        fontFamily: {
+          "math-display": ["Source Serif 4"],
+          "label-sm": ["JetBrains Mono"],
+          "body-md": ["Noto Sans JP"],
+          "body-lg": ["Noto Sans JP"],
+          "headline-md": ["Noto Sans JP"],
+          "display-lg": ["Noto Sans JP"]
+        },
+        fontSize: {
+          "math-display": ["20px", {lineHeight: "1.5", fontWeight: "400"}],
+          "label-sm": ["14px", {lineHeight: "1.0", fontWeight: "500"}],
+          "body-md": ["16px", {lineHeight: "1.6", fontWeight: "400"}],
+          "display-lg-mobile": ["32px", {lineHeight: "1.2", fontWeight: "700"}],
+          "body-lg": ["18px", {lineHeight: "1.6", fontWeight: "400"}],
+          "headline-md": ["24px", {lineHeight: "1.4", fontWeight: "600"}],
+          "display-lg": ["48px", {lineHeight: "1.2", fontWeight: "700"}]
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  body { background-color: #f3faff; scroll-behavior: smooth; }
+  .glass-card {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.4);
+  }
+
+  /* ==========================================
+     テーマ変数
+  ========================================== */
+  body.theme-light {
+    --bg: #f3faff; --surface: #ffffff; --surface-low: #e6f6ff;
+    --border: #c0c7d4; --text-primary: #071e27; --text-secondary: #404752;
+    --accent: #005ea4; --accent-light: #e6f0ff;
+    --correct-bg: #dcfce7; --correct-text: #166534; --correct-border: #86efac;
+    --incorrect-bg: #fee2e2; --incorrect-text: #991b1b; --incorrect-border: #fca5a5;
+    --tenkey-bg: #1e333c; --tenkey-btn: #2d4a56; --tenkey-text: #dff4ff;
+  }
+  body.theme-dark {
+    --bg: #0d1f2d; --surface: #1a2e3d; --surface-low: #152535;
+    --border: #2d4a56; --text-primary: #dff4ff; --text-secondary: #9ab5c2;
+    --accent: #a2c9ff; --accent-light: #1a2e3d;
+    --correct-bg: #052e16; --correct-text: #86efac; --correct-border: #166534;
+    --incorrect-bg: #450a0a; --incorrect-text: #fca5a5; --incorrect-border: #991b1b;
+    --tenkey-bg: #0a1a24; --tenkey-btn: #1a2e3d; --tenkey-text: #dff4ff;
+  }
+  body.theme-dark { background-color: var(--bg); color: var(--text-primary); }
+  body.theme-dark .glass-card { background: rgba(26,46,61,0.9); }
+  body.theme-contrast {
+    --bg: #000000; --surface: #111111; --surface-low: #1a1a1a;
+    --border: #ffff00; --text-primary: #ffffff; --text-secondary: #ffff00;
+    --accent: #00ffff; --accent-light: #001a1a;
+    --correct-bg: #002200; --correct-text: #00ff00; --correct-border: #00ff00;
+    --incorrect-bg: #220000; --incorrect-text: #ff5555; --incorrect-border: #ff0000;
+    --tenkey-bg: #000000; --tenkey-btn: #222222; --tenkey-text: #ffffff;
+  }
+  body.theme-contrast { background-color: #000; color: #fff; }
+  body.theme-dark header, body.theme-dark aside { background-color: var(--surface-low) !important; border-color: var(--border) !important; }
+  body.theme-dark .glass-card, body.theme-dark .bg-surface-container-lowest { background-color: var(--surface) !important; }
+
+  /* ==========================================
+     問題演習エリア（スタイルシートから移植）
+  ========================================== */
+  .workspace-section { background: var(--surface); border-radius: 16px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .problem-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 8px; }
+  .problem-meta { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-secondary); }
+  .difficulty-tag { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+  .difficulty-tag.basic { background: #dcfce7; color: #166534; }
+  .difficulty-tag.standard { background: #dbeafe; color: #1e40af; }
+  .difficulty-tag.advanced { background: #fef3c7; color: #92400e; }
+  .problem-body {
+    font-size: 17px;
+    line-height: 2.0;
+    margin-bottom: 20px;
+    padding: 20px 22px;
+    background: var(--accent-light);
+    border-radius: 12px;
+    border-left: 4px solid var(--accent);
+    overflow-x: auto;          /* 数式の横はみ出し防止 */
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  /* 問題文内の各段落に適切な余白 */
+  .problem-body p {
+    margin: 0 0 10px 0;
+  }
+  .problem-body p:last-child {
+    margin-bottom: 0;
+  }
+  /* 問題文内の数式ブロックを見やすく */
+  .problem-body .katex-display {
+    margin: 10px 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  /* 解説文も同様 */
+  .instruction-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    background: var(--surface-low);
+    border-radius: 8px;
+    line-height: 1.6;
+  }
+  .answer-section { margin-bottom: 20px; }
+  .answer-label { font-size: 14px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 10px; }
+  .math-input {
+    background: var(--surface); color: var(--text-primary); border: 2px solid var(--border);
+    border-radius: 10px; padding: 12px 16px; font-size: 18px; font-family: 'JetBrains Mono', monospace;
+    text-align: center; transition: border-color 0.2s; outline: none; cursor: pointer;
+    min-height: 50px; -webkit-tap-highlight-color: transparent;
+  }
+  .math-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,94,164,0.15); }
+  .math-input.very-short-input { width: 80px; }
+  .math-input.long-input { width: 180px; }
+  .inline-input-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .action-area { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-primary {
+    min-height: 50px; padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 15px;
+    border: none; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px;
+    color: white; background: var(--accent);
+  }
+  .btn-primary:active { transform: scale(0.97); opacity: 0.85; }
+  .btn-secondary {
+    min-height: 44px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 14px;
+    border: 2px solid var(--border); cursor: pointer; transition: all 0.2s; background: transparent; color: var(--text-primary);
+  }
+  .result-card { display: none; flex-direction: column; gap: 16px; padding: 24px; border-radius: 16px; }
+  .result-card.correct { background: var(--correct-bg); border: 2px solid var(--correct-border); }
+  .result-card.incorrect { background: var(--incorrect-bg); border: 2px solid var(--incorrect-border); }
+  .result-banner { display: flex; align-items: center; gap: 16px; }
+  .result-symbol { font-size: 40px; }
+  .result-text { display: flex; flex-direction: column; }
+  .result-title { font-size: 20px; font-weight: 800; }
+  .result-card.correct .result-title { color: var(--correct-text); }
+  .result-card.incorrect .result-title { color: var(--incorrect-text); }
+  .result-subtitle { font-size: 14px; color: var(--text-secondary); margin-top: 2px; }
+  .result-correct-answer { font-size: 16px; padding: 12px 16px; background: rgba(255,255,255,0.6); border-radius: 10px; }
+  .solution-box { background: var(--surface); border-radius: 16px; padding: 24px; border-left: 4px solid #f59e0b; }
+  .solution-title { font-size: 16px; font-weight: 800; margin-bottom: 16px; color: #92400e; }
+  .solution-content {
+    font-size: 16px;
+    line-height: 2.0;
+    color: var(--text-primary);
+    overflow-x: auto;
+    word-break: break-word;
+  }
+  .solution-content p {
+    margin: 0 0 10px 0;
+  }
+  .solution-content p:last-child {
+    margin-bottom: 0;
+  }
+  .solution-content .katex-display {
+    margin: 8px 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .choice-btn {
+    min-height: 50px; padding: 12px 20px; border-radius: 10px; border: 2px solid var(--border);
+    background: var(--surface); cursor: pointer; font-size: 17px; transition: all 0.2s; color: var(--text-primary);
+  }
+  .choice-btn.selected { border-color: var(--accent); background: var(--accent-light); }
+  .choice-btn:active { transform: scale(0.97); }
+  .choice-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+  
+  /* ==========================================
+     テンキー
+  ========================================== */
+  .tenkey-overlay {
+    position: fixed; bottom: -100%; left: 0; width: 100%; z-index: 1000;
+    background: var(--tenkey-bg); border-top: 2px solid rgba(255,255,255,0.1);
+    padding: 12px; transition: bottom 0.3s ease; box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+  }
+  .tenkey-overlay.open { bottom: 0; }
+  .tenkey-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; color: var(--tenkey-text); font-size: 13px; }
+  .tenkey-close-btn { background: rgba(255,255,255,0.1); border: none; color: var(--tenkey-text); padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; }
+  .tenkey-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 360px; margin: 0 auto; }
+  .key-btn {
+    min-height: 54px; border-radius: 10px; font-size: 20px; font-weight: 700; border: none;
+    cursor: pointer; transition: all 0.15s; background: var(--tenkey-btn); color: var(--tenkey-text);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .key-btn:active { transform: scale(0.93); background: rgba(255,255,255,0.2); }
+  .key-btn.action-key { background: rgba(255,255,255,0.08); font-size: 16px; }
+  .key-btn.confirm-key { grid-column: span 4; background: var(--accent); font-size: 16px; font-weight: 800; min-height: 50px; }
+  .key-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  body.tenkey-active #tenkey-spacer { height: 260px; }
+
+  /* ==========================================
+     メニュー・選択UI
+  ========================================== */
+  .nav-btn {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; border-radius: 12px; border: 2px solid var(--border);
+    background: var(--surface); cursor: pointer; transition: all 0.2s;
+    font-size: 15px; font-weight: 600; color: var(--text-primary);
+    min-height: 60px; text-align: left; width: 100%;
+  }
+  .nav-btn.selected { border-color: var(--accent); background: var(--accent-light); }
+  .nav-btn:active { transform: scale(0.98); }
+  .difficulty-btn { min-height: 60px; font-size: 16px; font-weight: 700; flex-direction: column; gap: 4px; }
+  .difficulty-btn.basic.selected { background: #dcfce7; border-color: #166534; color: #166534; }
+  .difficulty-btn.standard.selected { background: #dbeafe; border-color: #1e40af; color: #1e40af; }
+  .difficulty-btn.advanced.selected { background: #fef3c7; border-color: #92400e; color: #92400e; }
+  .difficulty-btn.completed-task { position: relative; }
+  .difficulty-btn.completed-task::after {
+    content: '✓'; position: absolute; top: 6px; right: 10px; font-size: 16px; color: #10b981;
+  }
+  .chapter-btn-content { flex: 1; }
+  .chapter-btn-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .chapter-name { font-size: 15px; font-weight: 700; }
+  .chapter-percent-badge { font-size: 12px; background: var(--accent-light); color: var(--accent); padding: 2px 8px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+  .chapter-mini-progress { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .chapter-mini-progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.5s ease; }
+  .custom-select {
+    width: 100%; min-height: 50px; padding: 12px 16px; border-radius: 10px; border: 2px solid var(--border);
+    background: var(--surface); color: var(--text-primary); font-size: 16px; cursor: pointer;
+    -webkit-appearance: none; outline: none;
+  }
+  .custom-select:focus { border-color: var(--accent); }
+  .select-wrapper { position: relative; }
+  .select-wrapper::after { content: '▼'; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--text-secondary); font-size: 12px; }
+  .progress-container { background: var(--surface-low); border-radius: 12px; padding: 16px; margin-bottom: 20px; }
+  .progress-info-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+  .progress-bar-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #60a5fa); border-radius: 4px; transition: width 0.8s cubic-bezier(0.4,0,0.2,1); }
+  .progress-meta { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+  .progress-percentage { font-weight: 800; color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+  .btn-analytics {
+    width: 100%; min-height: 54px; padding: 14px 20px; border-radius: 12px; border: 2px dashed var(--accent);
+    background: var(--accent-light); color: var(--accent); font-weight: 700; font-size: 15px;
+    cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.2s;
+  }
+  .btn-analytics:hover { background: var(--accent); color: white; }
+  .analytics-btn-badge { font-size: 12px; background: #ef4444; color: white; padding: 2px 8px; border-radius: 10px; margin-left: auto; }
+
+  /* ==========================================
+     苦手分析ダッシュボード
+  ========================================== */
+  .analytics-card { background: var(--surface); border-radius: 16px; padding: 24px; }
+  .analytics-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+  .analytics-panel-title { font-size: 20px; font-weight: 800; }
+  .btn-close-panel { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); background: transparent; cursor: pointer; font-size: 14px; color: var(--text-secondary); }
+  .analytics-empty { text-align: center; padding: 40px 20px; color: var(--text-secondary); }
+  .analytics-empty-icon { font-size: 48px; margin-bottom: 12px; }
+  .analytics-overview { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; margin-bottom: 24px; padding: 20px; background: var(--surface-low); border-radius: 12px; }
+  .accuracy-circle-wrapper { width: 120px; height: 120px; }
+  .accuracy-circle { width: 100%; height: 100%; }
+  .analytics-stats-grid { display: flex; gap: 16px; flex-wrap: wrap; }
+  .stat-card { background: var(--surface); padding: 12px 20px; border-radius: 10px; text-align: center; min-width: 80px; }
+  .stat-num { display: block; font-size: 24px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: var(--text-primary); }
+  .stat-label { font-size: 12px; color: var(--text-secondary); }
+  .correct-color { color: #10b981 !important; }
+  .wrong-color { color: #ef4444 !important; }
+  .analytics-breakdown { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+  .analytics-chapter-card { background: var(--surface-low); border-radius: 12px; overflow: hidden; }
+  .analytics-chapter-header { background: var(--accent); color: white; padding: 10px 16px; font-weight: 700; font-size: 14px; }
+  .analytics-section { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  .analytics-section:last-child { border-bottom: none; }
+  .analytics-section-label { font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary); }
+  .analytics-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .analytics-diff-tag { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 10px; min-width: 36px; text-align: center; }
+  .analytics-diff-tag.basic { background: #dcfce7; color: #166534; }
+  .analytics-diff-tag.standard { background: #dbeafe; color: #1e40af; }
+  .analytics-diff-tag.advanced { background: #fef3c7; color: #92400e; }
+  .analytics-bar-track { flex: 1; height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; }
+  .analytics-bar-fill { height: 100%; border-radius: 5px; transition: width 0.8s ease; }
+  .analytics-bar-fill.good { background: #10b981; }
+  .analytics-bar-fill.okay { background: #f59e0b; }
+  .analytics-bar-fill.weak { background: #ef4444; }
+  .analytics-bar-fill.untouched { background: var(--border); }
+  .analytics-bar-pct { font-size: 11px; color: var(--text-secondary); min-width: 100px; font-family: 'JetBrains Mono', monospace; }
+  .analytics-bar-pct.muted { color: var(--border); }
+  .weak-areas-section { margin-bottom: 24px; }
+  .weak-areas-title { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+  .weak-areas-desc { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; }
+  .weak-areas-list { display: flex; flex-direction: column; gap: 8px; }
+  .weak-area-btn {
+    display: flex; align-items: center; justify-content: space-between; padding: 14px 16px;
+    border-radius: 10px; border: 2px solid #fca5a5; background: #fee2e2; cursor: pointer;
+    transition: all 0.2s; text-align: left; gap: 12px;
+  }
+  .weak-area-btn:hover { background: #ef4444; color: white; }
+  .weak-area-info { display: flex; flex-direction: column; }
+  .weak-area-name { font-size: 14px; font-weight: 700; }
+  .weak-area-diff { font-size: 12px; color: #991b1b; margin-top: 2px; }
+  .weak-area-right { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+  .weak-area-pct { font-size: 18px; font-weight: 800; color: #ef4444; font-family: 'JetBrains Mono', monospace; }
+  .weak-area-count { font-size: 12px; color: var(--text-secondary); }
+  .weak-area-arrow { color: var(--text-secondary); }
+  .analytics-footer { text-align: center; padding-top: 16px; }
+  .btn-reset-history { padding: 10px 20px; border-radius: 8px; border: 1px solid #ef4444; color: #ef4444; background: transparent; cursor: pointer; font-size: 14px; }
+
+  /* ==========================================
+     アニメーション
+  ========================================== */
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .animate-pop { animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  
+  /* ==========================================
+     カンバス（グラフ描画）
+  ========================================== */
+  .graph-canvas-wrapper { background: var(--surface-low); border-radius: 12px; overflow: hidden; margin: 12px 0; }
+  
+  /* Section headers */
+  .menu-section { margin-bottom: 20px; }
+  .section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary); margin-bottom: 12px; }
+  .button-grid { display: flex; flex-direction: column; gap: 8px; }
+  .difficulty-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  
+  /* Canvas */
+  .canvas-container { display: flex; justify-content: center; margin: 16px 0; }
+  .canvas-container canvas { border: 1px solid var(--border); border-radius: 10px; max-width: 100%; height: auto; }
+  
+  /* Sidebar nav active */
+  .sidebar-nav-active { background-color: #dbeafe; color: #1e40af; font-weight: 700; }
+  .sidebar-nav-active .material-symbols-outlined { color: #1e40af; }
+</style>
+</head>
+
+<body class="font-body-md text-on-surface theme-light">
+
+<!-- ========================================
+     ヘッダー
+========================================= -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-desktop h-touch-target-min bg-surface-container-low shadow-sm" style="background: rgba(230,246,255,0.95); backdrop-filter: blur(8px);">
+  <div class="flex items-center gap-gutter">
+    <a href="index.html" class="font-headline-md text-headline-md font-bold text-primary no-underline">Universal Math Ⅰ</a>
+    <nav class="hidden md:flex gap-stack-md">
+      <a class="text-primary border-b-2 border-primary cursor-pointer px-4 py-1 font-semibold" href="index.html">学習する</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer px-4 py-1" href="dashboard.html">学習カルテ</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer px-4 py-1" href="formula.html">公式集</a>
+    </nav>
+  </div>
+  <div class="flex items-center gap-stack-md">
+    <span class="font-label-sm text-label-sm text-on-surface-variant hidden md:block" id="header-progress-label">Progress 0%</span>
+    <div class="w-24 h-2 bg-surface-variant rounded-full overflow-hidden hidden md:block">
+      <div class="bg-primary h-full transition-all duration-700" id="header-progress-fill" style="width:0%"></div>
+    </div>
+    <!-- テーマ切り替え -->
+    <div class="flex items-center gap-1 bg-surface-variant rounded-lg p-1">
+      <button class="theme-btn px-2 py-1 rounded text-xs font-bold transition-all active" id="btn-theme-light" data-theme="light" role="radio" aria-checked="true">🌅</button>
+      <button class="theme-btn px-2 py-1 rounded text-xs font-bold transition-all" id="btn-theme-dark" data-theme="dark" role="radio" aria-checked="false">🌌</button>
+      <button class="theme-btn px-2 py-1 rounded text-xs font-bold transition-all" id="btn-theme-contrast" data-theme="contrast" role="radio" aria-checked="false">👁️</button>
+    </div>
+    <a href="dashboard.html" class="material-symbols-outlined text-primary cursor-pointer">account_circle</a>
+  </div>
+</header>
+
+<div class="flex min-h-screen pt-touch-target-min">
+
+  <!-- ========================================
+       サイドバー
+  ========================================= -->
+  <aside class="hidden md:flex flex-col h-screen fixed left-0 top-touch-target-min w-64 p-stack-md bg-surface-container-low border-r border-outline-variant overflow-y-auto" style="height: calc(100vh - 50px); top: 50px;">
+    <div class="mb-stack-lg">
+      <h2 class="font-headline-md text-primary font-bold">Math I Learner</h2>
+      <p class="text-on-surface-variant font-label-sm">高校数学Ⅰ 個別学習</p>
+    </div>
+    <nav class="flex-grow space-y-2">
+      <a class="flex items-center gap-3 p-3 bg-primary-fixed text-primary rounded-lg font-bold" href="index.html">
+        <span class="material-symbols-outlined">menu_book</span>
+        <span class="font-body-lg text-body-lg">学習する</span>
+      </a>
+      <a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="dashboard.html">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="font-body-lg text-body-lg">学習カルテ</span>
+      </a>
+      <a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="formula.html">
+        <span class="material-symbols-outlined">function</span>
+        <span class="font-body-lg text-body-lg">公式集</span>
+      </a>
+    </nav>
+    <div class="mt-auto pt-stack-md space-y-2">
+      <!-- サイドバー内の進捗 -->
+      <div class="p-3 bg-surface-container rounded-xl">
+        <div class="flex justify-between items-center mb-2">
+          <span class="font-label-sm text-label-sm text-on-surface-variant">全体進捗</span>
+          <span class="font-label-sm font-bold text-primary" id="sidebar-progress-pct">0%</span>
+        </div>
+        <div class="w-full h-2 bg-surface-variant rounded-full overflow-hidden">
+          <div class="bg-primary h-full transition-all duration-700" id="sidebar-progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+      <a class="flex items-center gap-3 p-2 text-on-surface-variant hover:underline font-label-sm" href="formula.html">
+        <span class="material-symbols-outlined">auto_stories</span>
+        <span>公式シートを開く</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ========================================
+       メインコンテンツ
+  ========================================= -->
+  <main class="flex-grow ml-0 md:ml-64 p-margin-mobile md:p-gutter bg-background">
+    <div class="max-w-[800px] mx-auto flex flex-col gap-stack-md">
+
+      <!-- ========================================
+           選択パネル
+      ========================================= -->
+      <section class="glass-card rounded-2xl p-gutter" id="selection-panel" aria-label="学習単元と難易度の選択">
+        <h1 class="font-headline-md text-headline-md font-bold mb-stack-md text-on-surface">
+          📚 学習したい内容を選ぼう
+        </h1>
+
+        <!-- 全体進捗 -->
+        <div class="progress-container" id="total-progress-panel" aria-label="学習の全体進捗">
+          <div class="progress-info-row">
+            <span class="progress-label font-bold text-sm">📊 全体の学習進捗</span>
+            <span class="progress-percentage" id="total-progress-percent">0%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="total-progress-fill" style="width: 0%;"></div>
+          </div>
+          <div class="progress-meta" id="total-progress-meta">全 27 単元中、0 単元をクリアしました！</div>
+        </div>
+
+        <!-- 1. 章の選択 -->
+        <div class="menu-section">
+          <h3 class="section-title">1. 章を選ぶ</h3>
+          <div class="button-grid" id="chapter-buttons" role="radiogroup" aria-label="章の選択"></div>
+        </div>
+
+        <!-- 2. 節の選択 -->
+        <div class="menu-section" id="section-selection-container" style="display:none;">
+          <h3 class="section-title">2. 節を選ぶ</h3>
+          <div class="select-wrapper">
+            <select class="custom-select" id="section-select" aria-label="節の選択">
+              <option value="">節を選択してください...</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 3. 難易度の選択 -->
+        <div class="menu-section" id="difficulty-selection-container" style="display:none;">
+          <h3 class="section-title">3. 難易度を選ぶ</h3>
+          <div class="difficulty-grid" id="difficulty-buttons" role="radiogroup">
+            <button class="nav-btn difficulty-btn basic" id="diff-basic" role="radio" aria-checked="false" data-diff="basic"><span>基本</span></button>
+            <button class="nav-btn difficulty-btn standard" id="diff-standard" role="radio" aria-checked="false" data-diff="standard"><span>標準</span></button>
+            <button class="nav-btn difficulty-btn advanced" id="diff-advanced" role="radio" aria-checked="false" data-diff="advanced"><span>応用</span></button>
+          </div>
+        </div>
+
+        <!-- 苦手分析ボタン -->
+        <div class="menu-section">
+          <button class="btn-analytics" id="btn-open-analytics" aria-label="苦手範囲分析を開く">
+            <span class="material-symbols-outlined">analytics</span>
+            <span>苦手範囲を分析する</span>
+            <span class="analytics-btn-badge" id="analytics-badge" style="display:none;"></span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================
+           問題演習エリア
+      ========================================= -->
+      <section class="workspace-section" id="workspace-panel" style="display:none;" aria-label="問題演習">
+        <div class="problem-header">
+          <div class="problem-meta">
+            <span class="material-symbols-outlined text-sm">arrow_forward_ios</span>
+            <span id="current-chapter-name" class="font-semibold"></span>
+            <span class="material-symbols-outlined text-sm">arrow_forward_ios</span>
+            <span id="current-section-name"></span>
+          </div>
+          <span class="difficulty-tag standard" id="current-difficulty-tag">標準</span>
+        </div>
+
+        <!-- グラフキャンバスエリア（ai_generatorが挿入） -->
+        <div id="graph-canvas-area" class="graph-canvas-wrapper" style="display:none;"></div>
+
+        <!-- 問題文 -->
+        <div class="problem-body" id="problem-text-area"></div>
+
+        <!-- 解答指示 -->
+        <div class="instruction-text" id="problem-instruction-area">各枠に当てはまる半角の数値や符号を入力してください。</div>
+
+        <!-- 動的解答フォーム -->
+        <form class="answer-section" id="answer-form" onsubmit="return false;" aria-label="解答入力">
+          <span class="answer-label">あなたの解答：</span>
+          <div id="dynamic-input-area"></div>
+        </form>
+
+        <!-- 操作ボタン -->
+        <div class="action-area" style="margin-top:20px;">
+          <button class="btn-primary" id="btn-check-answer" style="background:#005ea4;">
+            <span class="material-symbols-outlined">check_circle</span> 答え合わせをする
+          </button>
+          <button class="btn-primary" id="btn-next-problem" style="display:none; background:#166534;">
+            <span class="material-symbols-outlined">arrow_forward</span> 次の問題を解く
+          </button>
+          <button class="btn-primary" id="btn-back-to-menu" style="background:#404752;">
+            <span class="material-symbols-outlined">home</span> メニューへ戻る
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================
+           苦手分析ダッシュボード
+      ========================================= -->
+      <section class="analytics-card" id="analytics-panel" style="display:none;" aria-label="苦手範囲分析ダッシュボード">
+        <div class="analytics-panel-header">
+          <h2 class="analytics-panel-title">📊 苦手範囲分析</h2>
+          <button class="btn-close-panel" id="btn-close-analytics">✖ 閉じる</button>
+        </div>
+        <div id="analytics-dashboard-content"></div>
+      </section>
+
+      <!-- ========================================
+           正誤判定エリア
+      ========================================= -->
+      <section class="result-card" id="result-panel" aria-live="polite"></section>
+
+      <section class="solution-box" id="solution-panel" style="display:none;">
+        <h3 class="solution-title">📖 丁寧な解説</h3>
+        <div class="solution-content" id="solution-content-area"></div>
+      </section>
+
+      <!-- テンキー用スペーサー -->
+      <div id="tenkey-spacer" style="height:0; transition: height 0.3s;"></div>
+    </div>
+  </main>
+</div>
+
+<!-- ========================================
+     カスタムテンキー
+========================================= -->
+<div class="tenkey-overlay" id="custom-tenkey" aria-label="数式専用テンキー" aria-hidden="true">
+  <div class="tenkey-header">
+    <span class="tenkey-title" id="tenkey-target-label">キーボード入力</span>
+    <button class="tenkey-close-btn" id="btn-close-tenkey">閉じる ✖</button>
+  </div>
+  <div class="tenkey-grid" role="grid">
+    <button class="key-btn" data-key="1" role="gridcell">1</button>
+    <button class="key-btn" data-key="2" role="gridcell">2</button>
+    <button class="key-btn" data-key="3" role="gridcell">3</button>
+    <button class="key-btn action-key" data-key="backspace" aria-label="1文字消去" role="gridcell">⌫</button>
+
+    <button class="key-btn" data-key="4" role="gridcell">4</button>
+    <button class="key-btn" data-key="5" role="gridcell">5</button>
+    <button class="key-btn" data-key="6" role="gridcell">6</button>
+    <button class="key-btn action-key" data-key="clear" role="gridcell">AC</button>
+
+    <button class="key-btn" data-key="7" role="gridcell">7</button>
+    <button class="key-btn" data-key="8" role="gridcell">8</button>
+    <button class="key-btn" data-key="9" role="gridcell">9</button>
+    <button class="key-btn" data-key="-" role="gridcell">-</button>
+
+    <button class="key-btn" data-key="0" role="gridcell">0</button>
+    <button class="key-btn" data-key="." role="gridcell">.</button>
+    <button class="key-btn" data-key="," role="gridcell">,</button>
+    <button class="key-btn action-key" data-key="next" role="gridcell">次へ</button>
+
+    <button class="key-btn confirm-key" id="btn-tenkey-confirm" role="gridcell">答え合わせ</button>
+  </div>
+</div>
+
+<!-- モバイルボトムナビ -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-low border-t border-outline-variant flex z-40" style="padding-bottom: env(safe-area-inset-bottom);" id="mobile-nav">
+  <a href="index.html" class="flex-1 flex flex-col items-center py-2 text-primary font-bold">
+    <span class="material-symbols-outlined">menu_book</span>
+    <span class="text-xs">学習</span>
+  </a>
+  <a href="dashboard.html" class="flex-1 flex flex-col items-center py-2 text-on-surface-variant">
+    <span class="material-symbols-outlined">dashboard</span>
+    <span class="text-xs">カルテ</span>
+  </a>
+  <a href="formula.html" class="flex-1 flex flex-col items-center py-2 text-on-surface-variant">
+    <span class="material-symbols-outlined">function</span>
+    <span class="text-xs">公式集</span>
+  </a>
+</nav>
+<div class="md:hidden" style="height:60px;"></div>
+
+<!-- JS読み込み -->
+<script src="math_problems.js"></script>
+<script src="ai_generator.js"></script>
+<script src="analytics.js"></script>
+<script src="app.js"></script>
+
+<script>
+// ヘッダー・サイドバーの進捗表示を同期する
+(function syncProgress() {
+  function update() {
+    const progressStr = localStorage.getItem("math_app_progress");
+    const progress = progressStr ? JSON.parse(progressStr) : {};
+    const total = 27;
+    const completed = Object.keys(progress).filter(k => progress[k]).length;
+    const pct = Math.round((completed / total) * 100);
+    const pctStr = pct + '%';
+    const hdr = document.getElementById('header-progress-fill');
+    const hdrLbl = document.getElementById('header-progress-label');
+    const sb = document.getElementById('sidebar-progress-fill');
+    const sbLbl = document.getElementById('sidebar-progress-pct');
+    if (hdr) hdr.style.width = pctStr;
+    if (hdrLbl) hdrLbl.textContent = 'Progress ' + pctStr;
+    if (sb) sb.style.width = pctStr;
+    if (sbLbl) sbLbl.textContent = pctStr;
+  }
+  update();
+  setInterval(update, 2000);
+  // analytics.jsのリセットイベントを受け取って即時更新
+  window.addEventListener('math_app_progress_reset', update);
+})();
+
+// ダッシュボードから苦手単元にジャンプ
+(function checkJump() {
+  const ch = localStorage.getItem('_jump_chapter');
+  const sc = localStorage.getItem('_jump_section');
+  const df = localStorage.getItem('_jump_difficulty');
+  if (ch && sc && df) {
+    localStorage.removeItem('_jump_chapter');
+    localStorage.removeItem('_jump_section');
+    localStorage.removeItem('_jump_difficulty');
+    // app.jsの初期化後に実行
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        // state + DOM を直接操作してジャンプ
+        const chBtns = document.querySelectorAll('#chapter-buttons button');
+        chBtns.forEach(btn => {
+          if (btn.dataset.chapter === ch) btn.click();
+        });
+        setTimeout(function() {
+          const secSelect = document.getElementById('section-select');
+          if (secSelect) { secSelect.value = sc; secSelect.dispatchEvent(new Event('change')); }
+          setTimeout(function() {
+            const diffBtn = document.getElementById('diff-' + df);
+            if (diffBtn) diffBtn.click();
+          }, 200);
+        }, 200);
+      }, 600);
+    });
+  }
+})();
+
+// KaTeX auto-render（app.jsのrenderMathとは別に起動保険）
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof renderMathInElement === 'function') {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ],
+      throwOnError: false
+    });
+  }
+});
+
+// ==========================================
+// テーマ管理（全ページ共通）
+// ==========================================
+(function() {
+  const THEME_KEY = 'math_app_theme';
+
+  function applyTheme(theme) {
+    document.body.className = document.body.className.replace(/theme-\w+/g, '').trim() + ' theme-' + theme;
+    if (theme === 'dark') document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
+    document.querySelectorAll('.theme-btn').forEach(b => {
+      const isActive = b.dataset.theme === theme;
+      b.classList.toggle('active', isActive);
+      b.classList.toggle('bg-white', isActive);
+      b.classList.toggle('shadow', isActive);
+      b.setAttribute('aria-checked', isActive ? 'true' : 'false');
+    });
+  }
+
+  // 保存済みテーマの即時復元（DOM構築前でも動く）
+  const saved = localStorage.getItem(THEME_KEY) || 'light';
+  applyTheme(saved);
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const theme = this.dataset.theme;
+        localStorage.setItem(THEME_KEY, theme);
+        applyTheme(theme);
+      });
+    });
+    // DOMContentLoaded後に再適用（ボタンのactiveも確実に反映）
+    applyTheme(localStorage.getItem(THEME_KEY) || 'light');
+  });
+})();
+</script>
+</body>
+</html>

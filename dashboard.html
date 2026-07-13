@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html class="light" lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>学習カルテ | Universal Math Ⅰ</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "secondary-fixed-dim": "#ffb77b", "surface-bright": "#f3faff",
+          "secondary-container": "#ff8f06", "surface-dim": "#c7dde9", "tertiary": "#006b1b",
+          "on-primary-fixed": "#001c38", "surface-container-highest": "#cfe6f2",
+          "inverse-on-surface": "#dff4ff", "outline": "#707783", "on-secondary-fixed": "#2e1500",
+          "on-background": "#071e27", "secondary-fixed": "#ffdcc2", "primary-fixed-dim": "#a2c9ff",
+          "tertiary-container": "#268630", "on-error": "#ffffff", "tertiary-fixed-dim": "#7ddc7a",
+          "background": "#f3faff", "on-tertiary-container": "#f7fff1", "on-surface-variant": "#404752",
+          "on-secondary-fixed-variant": "#6d3a00", "on-primary-container": "#fdfcff",
+          "on-primary-fixed-variant": "#004881", "on-primary": "#ffffff", "primary-fixed": "#d3e4ff",
+          "primary-container": "#0077ce", "surface-container": "#dbf1fe", "surface-variant": "#cfe6f2",
+          "inverse-surface": "#1e333c", "on-secondary-container": "#623300", "surface-container-low": "#e6f6ff",
+          "surface": "#f3faff", "on-tertiary": "#ffffff", "on-secondary": "#ffffff",
+          "inverse-primary": "#a2c9ff", "tertiary-fixed": "#98f994", "surface-container-lowest": "#ffffff",
+          "on-surface": "#071e27", "error": "#ba1a1a", "outline-variant": "#c0c7d4",
+          "surface-tint": "#0060a8", "error-container": "#ffdad6", "on-error-container": "#93000a",
+          "secondary": "#8f4e00", "primary": "#005ea4", "on-tertiary-fixed-variant": "#005313",
+          "surface-container-high": "#d5ecf8"
+        },
+        borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px" },
+        spacing: { "margin-desktop": "48px", "stack-sm": "8px", "stack-lg": "32px", "touch-target-min": "50px", "margin-mobile": "16px", "gutter": "24px", "stack-md": "16px" },
+        fontFamily: { "math-display": ["Source Serif 4"], "label-sm": ["JetBrains Mono"], "body-md": ["Noto Sans JP"], "body-lg": ["Noto Sans JP"], "headline-md": ["Noto Sans JP"], "display-lg": ["Noto Sans JP"] },
+        fontSize: {
+          "math-display": ["20px", {lineHeight:"1.5",fontWeight:"400"}], "label-sm": ["14px",{lineHeight:"1.0",fontWeight:"500"}],
+          "body-md": ["16px",{lineHeight:"1.6",fontWeight:"400"}], "display-lg-mobile": ["32px",{lineHeight:"1.2",fontWeight:"700"}],
+          "body-lg": ["18px",{lineHeight:"1.6",fontWeight:"400"}], "headline-md": ["24px",{lineHeight:"1.4",fontWeight:"600"}],
+          "display-lg": ["48px",{lineHeight:"1.2",fontWeight:"700"}]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { background-color: #f3faff; }
+  .progress-ring__circle { transition: stroke-dashoffset 0.8s ease-in-out; transform: rotate(-90deg); transform-origin: 50% 50%; }
+  .chart-bar { transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); }
+  .glass-card { background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.4); }
+  .stat-ring-card { position: relative; }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-in { animation: fadeInUp 0.5s ease both; }
+  .fade-in-2 { animation: fadeInUp 0.5s 0.1s ease both; }
+  .fade-in-3 { animation: fadeInUp 0.5s 0.2s ease both; }
+  .fade-in-4 { animation: fadeInUp 0.5s 0.3s ease both; }
+
+  /* 苦手エリア共通スタイル */
+  .weak-area-item { transition: all 0.2s; }
+  .weak-area-item:hover { transform: translateX(4px); }
+  body.theme-light {
+    --bg: #f3faff; --surface: #ffffff; --surface-low: #e6f6ff;
+    --border: #c0c7d4; --text-primary: #071e27; --text-secondary: #404752;
+    --accent: #005ea4; --accent-light: #e6f0ff;
+  }
+  body.theme-dark {
+    --bg: #0d1f2d; --surface: #1a2e3d; --surface-low: #152535;
+    --border: #2d4a56; --text-primary: #dff4ff; --text-secondary: #9ab5c2;
+    --accent: #a2c9ff; --accent-light: #1a2e3d;
+  }
+  body.theme-dark { background-color: var(--bg) !important; color: var(--text-primary) !important; }
+  body.theme-dark header, body.theme-dark aside { background-color: #152535 !important; border-color: #2d4a56 !important; }
+  body.theme-dark .glass-card, body.theme-dark .bg-surface-container-lowest,
+  body.theme-dark .bg-surface-container-low { background-color: #1a2e3d !important; color: #dff4ff !important; }
+  body.theme-dark .bg-background { background-color: #0d1f2d !important; }
+  body.theme-dark .text-on-surface, body.theme-dark .text-on-surface-variant { color: #9ab5c2 !important; }
+  body.theme-dark .text-on-surface { color: #dff4ff !important; }
+  body.theme-dark .border-outline-variant { border-color: #2d4a56 !important; }
+  body.theme-contrast {
+    --bg: #000; --surface: #111; --surface-low: #1a1a1a;
+    --border: #ffff00; --text-primary: #ffffff; --text-secondary: #ffff00;
+    --accent: #00ffff; --accent-light: #001a1a;
+  }
+  body.theme-contrast { background-color: #000 !important; color: #fff !important; }
+  body.theme-contrast * { border-color: #ffff00 !important; }
+  body.theme-contrast a, body.theme-contrast .text-primary { color: #00ffff !important; }
+</style>
+</head>
+<body class="font-body-md text-on-surface">
+
+<!-- ヘッダー -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-desktop h-touch-target-min bg-surface-container-low shadow-sm" style="background: rgba(230,246,255,0.95); backdrop-filter: blur(8px);">
+  <div class="flex items-center gap-gutter">
+    <a href="index.html" class="font-headline-md text-headline-md font-bold text-primary no-underline">Universal Math Ⅰ</a>
+    <nav class="hidden md:flex gap-stack-md">
+      <a class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer px-4 py-1" href="index.html">学習する</a>
+      <a class="text-primary border-b-2 border-primary cursor-pointer px-4 py-1 font-semibold" href="dashboard.html">学習カルテ</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer px-4 py-1" href="formula.html">公式集</a>
+    </nav>
+  </div>
+  <div class="flex items-center gap-stack-md">
+    <span class="font-label-sm text-label-sm text-on-surface-variant hidden md:block" id="header-progress-label">Progress 0%</span>
+    <div class="w-24 h-2 bg-surface-variant rounded-full overflow-hidden hidden md:block">
+      <div class="bg-primary h-full transition-all duration-700" id="header-progress-fill" style="width:0%"></div>
+    </div>
+    <a href="index.html" class="material-symbols-outlined text-primary cursor-pointer">menu_book</a>
+  </div>
+</header>
+
+<div class="flex min-h-screen pt-touch-target-min">
+  <!-- サイドバー -->
+  <aside class="hidden md:flex flex-col h-screen fixed left-0 top-touch-target-min w-64 p-stack-md bg-surface-container-low border-r border-outline-variant overflow-y-auto" style="height:calc(100vh - 50px);top:50px;">
+    <div class="mb-stack-lg">
+      <h2 class="font-headline-md text-primary font-bold">Math I Learner</h2>
+      <p class="text-on-surface-variant font-label-sm">高校数学Ⅰ 個別学習</p>
+    </div>
+    <nav class="flex-grow space-y-2">
+      <a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="index.html">
+        <span class="material-symbols-outlined">menu_book</span>
+        <span class="font-body-lg text-body-lg">学習する</span>
+      </a>
+      <a class="flex items-center gap-3 p-3 bg-primary-fixed text-primary rounded-lg font-bold" href="dashboard.html">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="font-body-lg text-body-lg">学習カルテ</span>
+      </a>
+      <a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="formula.html">
+        <span class="material-symbols-outlined">function</span>
+        <span class="font-body-lg text-body-lg">公式集</span>
+      </a>
+    </nav>
+    <div class="mt-auto pt-stack-md">
+      <div class="p-3 bg-surface-container rounded-xl">
+        <div class="flex justify-between items-center mb-2">
+          <span class="font-label-sm text-label-sm text-on-surface-variant">全体進捗</span>
+          <span class="font-label-sm font-bold text-primary" id="sidebar-progress-pct">0%</span>
+        </div>
+        <div class="w-full h-2 bg-surface-variant rounded-full overflow-hidden">
+          <div class="bg-primary h-full transition-all duration-700" id="sidebar-progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- メインコンテンツ -->
+  <main class="flex-grow ml-0 md:ml-64 p-margin-mobile md:p-margin-desktop bg-background">
+    <div class="max-w-[1000px] mx-auto">
+
+      <!-- ヒーローセクション -->
+      <section class="mb-stack-lg fade-in">
+        <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-2 tracking-tight">あなた専用の学習カルテ</h1>
+        <p class="text-body-lg text-on-surface-variant">解答履歴から苦手単元を自動抽出し、集中復習プランを提案します。</p>
+      </section>
+
+      <!-- 進捗オーバービューグリッド（動的） -->
+      <section class="grid grid-cols-2 md:grid-cols-4 gap-gutter mb-stack-lg fade-in-2" id="chapter-progress-grid">
+        <!-- JavaScriptで動的生成 -->
+      </section>
+
+      <!-- 全体サマリーと苦手 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter mb-stack-lg">
+        <!-- 全体正答率 -->
+        <div class="glass-card rounded-2xl p-gutter fade-in-2" id="overall-accuracy-card">
+          <h2 class="font-headline-md text-headline-md mb-stack-md flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">donut_large</span>
+            総合正答率
+          </h2>
+          <div id="overall-accuracy-content">
+            <p class="text-on-surface-variant">まだ学習記録がありません。<br>問題を解くと、ここに正答率が表示されます！</p>
+          </div>
+        </div>
+
+        <!-- 苦手TOP5 -->
+        <div class="glass-card rounded-2xl p-gutter fade-in-3" id="weak-areas-card">
+          <h2 class="font-headline-md text-headline-md mb-stack-md flex items-center gap-2">
+            <span class="material-symbols-outlined text-error">warning</span>
+            苦手ランキング
+          </h2>
+          <div id="weak-areas-content">
+            <p class="text-on-surface-variant">まだ記録がありません。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 詳細分析 -->
+      <div class="glass-card rounded-2xl p-gutter mb-stack-lg fade-in-4" id="detail-analytics-card">
+        <div class="flex justify-between items-center mb-stack-md">
+          <h2 class="font-headline-md text-headline-md flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">analytics</span>
+            単元別詳細分析
+          </h2>
+          <button id="btn-reset-history-dashboard" class="text-sm text-error border border-error px-3 py-1 rounded-lg hover:bg-error hover:text-white transition-colors">記録をリセット</button>
+        </div>
+        <div id="detail-analytics-content">
+          <p class="text-on-surface-variant text-center py-8">問題を解くと詳細分析が表示されます。</p>
+        </div>
+      </div>
+
+      <!-- 学習へのCTA -->
+      <div class="glass-card rounded-2xl p-gutter mb-stack-lg fade-in-4 flex flex-col md:flex-row items-center justify-between gap-gutter">
+        <div>
+          <h3 class="font-headline-md font-bold mb-2">今すぐ学習を再開しよう！</h3>
+          <p class="text-on-surface-variant text-sm">苦手な単元を克服して、全単元クリアを目指しましょう。</p>
+        </div>
+        <a href="index.html" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-lg flex items-center gap-2 hover:bg-blue-700 transition-colors whitespace-nowrap">
+          <span class="material-symbols-outlined">play_circle</span>
+          学習を再開する
+        </a>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- モバイルボトムナビ -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-low border-t border-outline-variant flex z-40" style="padding-bottom:env(safe-area-inset-bottom);">
+  <a href="index.html" class="flex-1 flex flex-col items-center py-2 text-on-surface-variant">
+    <span class="material-symbols-outlined">menu_book</span>
+    <span class="text-xs">学習</span>
+  </a>
+  <a href="dashboard.html" class="flex-1 flex flex-col items-center py-2 text-primary font-bold">
+    <span class="material-symbols-outlined">dashboard</span>
+    <span class="text-xs">カルテ</span>
+  </a>
+  <a href="formula.html" class="flex-1 flex flex-col items-center py-2 text-on-surface-variant">
+    <span class="material-symbols-outlined">function</span>
+    <span class="text-xs">公式集</span>
+  </a>
+</nav>
+<div class="md:hidden" style="height:60px;"></div>
+
+<script src="math_problems.js"></script>
+<script src="analytics.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const structure = MathProblems.getStructure();
+  const circumference = 2 * Math.PI * 40;
+
+  // ==========================================
+  // 章別進捗グリッド
+  // ==========================================
+  function getProgressData() {
+    const progressStr = localStorage.getItem("math_app_progress");
+    return progressStr ? JSON.parse(progressStr) : {};
+  }
+
+  function buildChapterGrid() {
+    const progress = getProgressData();
+    const grid = document.getElementById('chapter-progress-grid');
+    const chapterColors = ['text-primary', 'text-secondary', 'text-tertiary', 'text-primary'];
+    const chapterIcons = ['calculate', 'function', 'straighten', 'bar_chart'];
+    
+    let i = 0;
+    Object.keys(structure).forEach(chapterId => {
+      const chapter = structure[chapterId];
+      const sectionCount = Object.keys(chapter.sections).length;
+      const totalUnits = sectionCount * 3;
+      let completed = 0;
+      Object.keys(chapter.sections).forEach(sectionId => {
+        ['basic','standard','advanced'].forEach(diff => {
+          if (progress[`${chapterId}-${sectionId}-${diff}`]) completed++;
+        });
+      });
+      const pct = totalUnits > 0 ? Math.round((completed / totalUnits) * 100) : 0;
+      const offset = circumference * (1 - pct / 100);
+      const strokeColor = i === 0 ? '#005ea4' : i === 1 ? '#8f4e00' : '#006b1b';
+
+      grid.innerHTML += `
+        <div class="bg-surface-container-lowest p-stack-md rounded-xl shadow-sm border border-outline-variant/30 flex flex-col items-center text-center">
+          <span class="material-symbols-outlined ${chapterColors[i]} mb-2">${chapterIcons[i]}</span>
+          <span class="font-label-sm text-on-surface-variant mb-2 text-xs">${chapter.name}</span>
+          <div class="relative w-20 h-20 mb-3">
+            <svg class="w-full h-full" viewBox="0 0 100 100">
+              <circle class="stroke-current text-surface-variant" cx="50" cy="50" fill="transparent" r="40" stroke-width="10"></circle>
+              <circle class="progress-ring__circle" cx="50" cy="50" fill="transparent" r="40"
+                stroke-linecap="round" stroke-width="10"
+                stroke="${strokeColor}"
+                style="stroke-dasharray:${circumference.toFixed(1)};stroke-dashoffset:${circumference.toFixed(1)}"
+                data-target="${offset.toFixed(1)}">
+              </circle>
+            </svg>
+            <span class="absolute inset-0 flex items-center justify-center font-bold text-sm font-label-sm">${pct}%</span>
+          </div>
+          <div class="font-label-sm text-xs text-on-surface-variant">${completed}/${totalUnits} クリア</div>
+        </div>
+      `;
+      i++;
+    });
+
+    // アニメーション起動
+    setTimeout(() => {
+      document.querySelectorAll('.progress-ring__circle[data-target]').forEach(el => {
+        el.style.strokeDashoffset = el.dataset.target;
+      });
+    }, 300);
+  }
+
+  // ==========================================
+  // 総合正答率
+  // ==========================================
+  function buildOverallAccuracy() {
+    const history = JSON.parse(localStorage.getItem('math_app_history') || '[]');
+    const card = document.getElementById('overall-accuracy-content');
+    if (history.length === 0) return;
+
+    const correct = history.filter(h => h.isCorrect).length;
+    const acc = Math.round((correct / history.length) * 100);
+    const color = acc >= 80 ? '#10b981' : acc >= 60 ? '#f59e0b' : '#ef4444';
+    const offset = circumference * (1 - acc / 100);
+
+    card.innerHTML = `
+      <div class="flex items-center gap-stack-lg">
+        <div class="relative w-28 h-28 flex-shrink-0">
+          <svg viewBox="0 0 100 100" class="w-full h-full">
+            <circle cx="50" cy="50" r="40" fill="none" stroke="#e2e8f0" stroke-width="10"/>
+            <circle cx="50" cy="50" r="40" fill="none" stroke="${color}" stroke-width="10"
+              stroke-linecap="round"
+              stroke-dasharray="${circumference.toFixed(1)}"
+              stroke-dashoffset="${circumference.toFixed(1)}"
+              transform="rotate(-90 50 50)"
+              class="progress-ring__circle" data-target="${offset.toFixed(1)}" />
+            <text x="50" y="47" text-anchor="middle" font-size="20" font-weight="bold" fill="#071e27">${acc}%</text>
+            <text x="50" y="62" text-anchor="middle" font-size="9" fill="#707783">正答率</text>
+          </svg>
+        </div>
+        <div class="space-y-3">
+          <div class="flex gap-4">
+            <div class="text-center">
+              <div class="font-label-sm font-bold text-2xl text-on-surface">${history.length}</div>
+              <div class="text-xs text-on-surface-variant">総解答数</div>
+            </div>
+            <div class="text-center">
+              <div class="font-label-sm font-bold text-2xl" style="color:#10b981">${correct}</div>
+              <div class="text-xs text-on-surface-variant">正解数</div>
+            </div>
+            <div class="text-center">
+              <div class="font-label-sm font-bold text-2xl text-error">${history.length - correct}</div>
+              <div class="text-xs text-on-surface-variant">不正解数</div>
+            </div>
+          </div>
+          <div class="text-sm text-on-surface-variant">
+            ${acc >= 80 ? '🎉 素晴らしい成績です！' : acc >= 60 ? '📈 順調に伸びています！' : '💪 苦手を克服して伸ばそう！'}
+          </div>
+        </div>
+      </div>
+    `;
+
+    setTimeout(() => {
+      document.querySelectorAll('.progress-ring__circle[data-target]').forEach(el => {
+        el.style.strokeDashoffset = el.dataset.target;
+      });
+    }, 400);
+  }
+
+  // ==========================================
+  // 苦手ランキング TOP5
+  // ==========================================
+  function buildWeakAreas() {
+    const weakAreas = Analytics.getWeakAreas().slice(0, 5);
+    const card = document.getElementById('weak-areas-content');
+    if (weakAreas.length === 0) {
+      card.innerHTML = '<p class="text-on-surface-variant text-sm">苦手な単元がありません。この調子で！🎉</p>';
+      return;
+    }
+
+    const diffLabels = { basic:'基本', standard:'標準', advanced:'応用' };
+    card.innerHTML = weakAreas.map((r, i) => {
+      const chapterName = structure[r.chapterId]?.name || r.chapterId;
+      const sectionName = structure[r.chapterId]?.sections[r.sectionId] || r.sectionId;
+      const barColor = r.accuracy < 30 ? '#ef4444' : r.accuracy < 50 ? '#f97316' : '#f59e0b';
+      return `
+        <div class="weak-area-item flex items-center gap-3 py-2 border-b border-outline-variant last:border-0">
+          <span class="font-label-sm font-bold text-on-surface-variant w-5">${i+1}</span>
+          <div class="flex-1 min-w-0">
+            <div class="text-sm font-semibold truncate">${chapterName} › ${sectionName}</div>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-xs px-2 py-0.5 rounded-full bg-surface-variant text-on-surface-variant">${diffLabels[r.difficulty]}</span>
+              <div class="flex-1 h-1.5 bg-surface-variant rounded-full overflow-hidden">
+                <div class="h-full rounded-full chart-bar" style="width:0%;background:${barColor}" data-target="${r.accuracy}%"></div>
+              </div>
+              <span class="font-label-sm text-xs font-bold" style="color:${barColor}">${r.accuracy}%</span>
+            </div>
+          </div>
+          <a href="index.html" class="text-xs bg-primary text-white px-2 py-1 rounded font-bold hover:opacity-80 whitespace-nowrap">復習する</a>
+        </div>
+      `;
+    }).join('');
+
+    setTimeout(() => {
+      document.querySelectorAll('.chart-bar[data-target]').forEach(el => {
+        el.style.width = el.dataset.target;
+      });
+    }, 400);
+  }
+
+  // ==========================================
+  // 詳細分析（Analytics.renderDashboardを利用）
+  // ==========================================
+  function buildDetailAnalytics() {
+    const container = document.getElementById('detail-analytics-content');
+    Analytics.renderDashboard(container, structure, function(chapterId, sectionId, difficulty) {
+      localStorage.setItem('_jump_chapter', chapterId);
+      localStorage.setItem('_jump_section', sectionId);
+      localStorage.setItem('_jump_difficulty', difficulty);
+      window.location.href = 'index.html';
+    });
+  }
+
+  // ==========================================
+  // 全体進捗（ヘッダー・サイドバー）
+  // ==========================================
+  function syncProgress() {
+    const progress = getProgressData();
+    const total = 27;
+    const completed = Object.keys(progress).filter(k => progress[k]).length;
+    const pct = Math.round((completed / total) * 100);
+    const pctStr = pct + '%';
+    const els = {
+      hf: document.getElementById('header-progress-fill'),
+      hl: document.getElementById('header-progress-label'),
+      sf: document.getElementById('sidebar-progress-fill'),
+      sl: document.getElementById('sidebar-progress-pct')
+    };
+    if (els.hf) els.hf.style.width = pctStr;
+    if (els.hl) els.hl.textContent = 'Progress ' + pctStr;
+    if (els.sf) els.sf.style.width = pctStr;
+    if (els.sl) els.sl.textContent = pctStr;
+  }
+
+  // リセットボタン
+  document.getElementById('btn-reset-history-dashboard').addEventListener('click', function() {
+    if (confirm('学習記録と学習進捗をすべてリセットしますか？\nこの操作は取り消せません。')) {
+      Analytics.clearHistory();
+      localStorage.removeItem('math_app_progress');
+      location.reload();
+    }
+  });
+
+  // 初期化
+  buildChapterGrid();
+  buildOverallAccuracy();
+  buildWeakAreas();
+  buildDetailAnalytics();
+  syncProgress();
+});
+</script>
+<script>
+// ==========================================
+// テーマ管理（全ページ共通）
+// ==========================================
+(function() {
+  const THEME_KEY = 'math_app_theme';
+
+  function applyTheme(theme) {
+    document.body.className = document.body.className.replace(/theme-\w+/g, '').trim() + ' theme-' + theme;
+    if (theme === 'dark') document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
+    document.querySelectorAll('.theme-btn').forEach(b => {
+      const isActive = b.dataset.theme === theme;
+      b.classList.toggle('active', isActive);
+      b.classList.toggle('bg-white', isActive);
+      b.classList.toggle('shadow', isActive);
+      b.setAttribute('aria-checked', isActive ? 'true' : 'false');
+    });
+  }
+
+  // 保存済みテーマの即時復元（DOM構築前でも動く）
+  const saved = localStorage.getItem(THEME_KEY) || 'light';
+  applyTheme(saved);
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const theme = this.dataset.theme;
+        localStorage.setItem(THEME_KEY, theme);
+        applyTheme(theme);
+      });
+    });
+    // DOMContentLoaded後に再適用（ボタンのactiveも確実に反映）
+    applyTheme(localStorage.getItem(THEME_KEY) || 'light');
+  });
+})();
+</script>
+</body>
+</html>

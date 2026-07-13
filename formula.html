@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html class="light" lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>数学Ⅰ ビジュアル公式集 | Universal Math Ⅰ</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "secondary-fixed-dim":"#ffb77b","surface-bright":"#f3faff","secondary-container":"#ff8f06",
+          "surface-dim":"#c7dde9","tertiary":"#006b1b","on-primary-fixed":"#001c38",
+          "surface-container-highest":"#cfe6f2","inverse-on-surface":"#dff4ff","outline":"#707783",
+          "on-secondary-fixed":"#2e1500","on-background":"#071e27","secondary-fixed":"#ffdcc2",
+          "primary-fixed-dim":"#a2c9ff","tertiary-container":"#268630","on-error":"#ffffff",
+          "tertiary-fixed-dim":"#7ddc7a","background":"#f3faff","on-tertiary-container":"#f7fff1",
+          "on-surface-variant":"#404752","on-secondary-fixed-variant":"#6d3a00","on-primary-container":"#fdfcff",
+          "on-primary-fixed-variant":"#004881","on-primary":"#ffffff","primary-fixed":"#d3e4ff",
+          "primary-container":"#0077ce","surface-container":"#dbf1fe","surface-variant":"#cfe6f2",
+          "inverse-surface":"#1e333c","on-secondary-container":"#623300","surface-container-low":"#e6f6ff",
+          "surface":"#f3faff","on-tertiary":"#ffffff","on-secondary":"#ffffff","inverse-primary":"#a2c9ff",
+          "tertiary-fixed":"#98f994","surface-container-lowest":"#ffffff","on-surface":"#071e27",
+          "error":"#ba1a1a","outline-variant":"#c0c7d4","surface-tint":"#0060a8","error-container":"#ffdad6",
+          "on-error-container":"#93000a","secondary":"#8f4e00","primary":"#005ea4",
+          "on-tertiary-fixed-variant":"#005313","surface-container-high":"#d5ecf8"
+        },
+        borderRadius: { DEFAULT:"0.25rem", lg:"0.5rem", xl:"0.75rem", full:"9999px" },
+        spacing: { "margin-desktop":"48px","stack-sm":"8px","stack-lg":"32px","touch-target-min":"50px","margin-mobile":"16px","gutter":"24px","stack-md":"16px" },
+        fontFamily: { "math-display":["Source Serif 4"],"label-sm":["JetBrains Mono"],"body-md":["Noto Sans JP"],"body-lg":["Noto Sans JP"],"headline-md":["Noto Sans JP"],"display-lg":["Noto Sans JP"] },
+        fontSize: {
+          "math-display":["20px",{lineHeight:"1.5",fontWeight:"400"}],"label-sm":["14px",{lineHeight:"1.0",fontWeight:"500"}],
+          "body-md":["16px",{lineHeight:"1.6",fontWeight:"400"}],"display-lg-mobile":["32px",{lineHeight:"1.2",fontWeight:"700"}],
+          "body-lg":["18px",{lineHeight:"1.6",fontWeight:"400"}],"headline-md":["24px",{lineHeight:"1.4",fontWeight:"600"}],
+          "display-lg":["48px",{lineHeight:"1.2",fontWeight:"700"}]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { background-color: #f3faff; }
+  .math-card {
+    background: rgba(255,255,255,0.9);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .math-card:hover { box-shadow: 0 6px 24px rgba(0,94,164,0.12); transform: translateY(-2px); }
+  .formula-display {
+    font-family: 'Source Serif 4', serif;
+    font-size: 18px;
+    line-height: 1.7;
+    text-align: center;
+    padding: 14px 16px;
+    background: #f3faff;
+    border-radius: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    word-break: normal;      /* 数式は途中で折らない */
+  }
+  /* formula-display 内の説明テキストは左揃えに */
+  .formula-display p {
+    text-align: left;
+    font-size: 13px;
+    font-family: 'Noto Sans JP', sans-serif;
+    margin: 6px 0 0 0;
+    line-height: 1.6;
+  }
+  /* KaTeX ブロック数式の余白 */
+  .formula-display .katex-display {
+    margin: 6px 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .diagram-container { background: #f8fafc; }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  .section-fade { animation: fadeInUp 0.5s ease both; }
+  .katex { font-size: 1.1em !important; }
+  
+  /* 検索ハイライト */
+  .formula-hidden { display: none !important; }
+  
+  /* カテゴリーナビ（サイドバー） */
+  .category-link { transition: all 0.2s; }
+  .category-link:hover { color: #005ea4; padding-left: 4px; }
+  .category-link.active { color: #005ea4; font-weight: 700; border-left: 3px solid #005ea4; padding-left: 8px; }
+  body.theme-light {
+    --bg: #f3faff; --surface: #ffffff; --surface-low: #e6f6ff;
+    --border: #c0c7d4; --text-primary: #071e27; --text-secondary: #404752;
+    --accent: #005ea4; --accent-light: #e6f0ff;
+  }
+  body.theme-dark {
+    --bg: #0d1f2d; --surface: #1a2e3d; --surface-low: #152535;
+    --border: #2d4a56; --text-primary: #dff4ff; --text-secondary: #9ab5c2;
+    --accent: #a2c9ff; --accent-light: #1a2e3d;
+  }
+  body.theme-dark { background-color: #0d1f2d !important; color: #dff4ff !important; }
+  body.theme-dark header { background: rgba(21,37,53,0.95) !important; }
+  body.theme-dark aside { background-color: #152535 !important; }
+  body.theme-dark .math-card { background-color: #1a2e3d !important; color: #dff4ff !important; }
+  body.theme-dark .formula-display { background: #152535 !important; color: #dff4ff !important; }
+  body.theme-dark .bg-surface-bright, body.theme-dark .bg-background { background-color: #0d1f2d !important; }
+  body.theme-dark .bg-surface-container-lowest, body.theme-dark .bg-surface-container-low,
+  body.theme-dark .bg-white { background-color: #1a2e3d !important; color: #dff4ff !important; }
+  body.theme-dark .text-on-surface-variant { color: #9ab5c2 !important; }
+  body.theme-dark .text-on-surface { color: #dff4ff !important; }
+  body.theme-dark .border-outline-variant, body.theme-dark .border-surface-variant { border-color: #2d4a56 !important; }
+  body.theme-dark .diagram-container { background: #152535 !important; }
+  body.theme-contrast { background-color: #000 !important; color: #fff !important; }
+  body.theme-contrast .math-card { background: #111 !important; border-color: #ffff00 !important; }
+  body.theme-contrast .formula-display { background: #000 !important; color: #fff !important; }
+  body.theme-contrast a, body.theme-contrast .text-primary { color: #00ffff !important; }
+</style>
+</head>
+
+<body class="font-body-md text-on-surface">
+
+<!-- ヘッダー -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-desktop h-touch-target-min shadow-sm" style="background:rgba(230,246,255,0.95);backdrop-filter:blur(8px);">
+  <div class="flex items-center gap-gutter">
+    <a href="index.html" class="font-headline-md font-bold text-primary no-underline">Universal Math Ⅰ</a>
+    <nav class="hidden md:flex gap-stack-md">
+      <a class="text-on-surface-variant hover:text-primary transition-colors px-4 py-1" href="index.html">学習する</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors px-4 py-1" href="dashboard.html">学習カルテ</a>
+      <a class="text-primary border-b-2 border-primary px-4 py-1 font-semibold" href="formula.html">公式集</a>
+    </nav>
+  </div>
+  <div class="flex items-center gap-stack-md">
+    <div class="flex items-center gap-1 bg-surface-variant rounded-lg p-1">
+      <button class="theme-btn px-2 py-1 rounded text-xs font-bold transition-all" data-theme="light" role="radio">🌅</button>
+      <button class="theme-btn px-2 py-1 rounded text-xs font-bold transition-all" data-theme="dark" role="radio">🌌</button>
+      <button class="theme-btn px-2 py-1 rounded text-xs font-bold transition-all" data-theme="contrast" role="radio">👁️</button>
+    </div>
+  </div>
+  <div class="hidden md:flex items-center bg-surface-container-low px-stack-md py-1 rounded-full border border-outline-variant">
+    <span class="material-symbols-outlined text-outline text-xl mr-2">search</span>
+    <input class="bg-transparent border-none focus:ring-0 text-body-md w-40 outline-none" placeholder="公式を検索..." type="text" id="formula-search"/>
+  </div>
+</header>
+
+<div class="flex pt-touch-target-min min-h-screen">
+  <!-- サイドバー -->
+  <aside class="hidden md:flex flex-col w-64 fixed left-0 bg-surface-container p-stack-md overflow-y-auto" style="height:calc(100vh - 50px);top:50px;">
+    <div class="mb-stack-lg">
+      <h2 class="font-headline-md text-primary font-bold">数学Ⅰ 公式集</h2>
+      <p class="text-on-surface-variant font-label-sm">全単元を網羅</p>
+    </div>
+    <nav class="flex-1 space-y-1">
+      <a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="index.html">
+        <span class="material-symbols-outlined">menu_book</span><span>学習する</span>
+      </a>
+      <a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="dashboard.html">
+        <span class="material-symbols-outlined">dashboard</span><span>学習カルテ</span>
+      </a>
+      <a class="flex items-center gap-3 p-3 bg-primary-fixed text-primary rounded-lg font-bold" href="formula.html">
+        <span class="material-symbols-outlined">function</span><span>公式集</span>
+      </a>
+    </nav>
+    <div class="mt-stack-lg border-t border-outline-variant pt-stack-md">
+      <p class="font-label-sm text-on-surface-variant mb-stack-sm text-xs uppercase tracking-wider">目次</p>
+      <div class="space-y-1">
+        <a href="#sec-expressions" class="category-link block text-sm text-on-surface-variant py-1 px-2 rounded">📐 数と式</a>
+        <a href="#sec-sets" class="category-link block text-sm text-on-surface-variant py-1 px-2 rounded">🔵 集合と命題</a>
+        <a href="#sec-quadratic" class="category-link block text-sm text-on-surface-variant py-1 px-2 rounded">📈 2次関数</a>
+        <a href="#sec-trig" class="category-link block text-sm text-on-surface-variant py-1 px-2 rounded">📐 図形と計量</a>
+        <a href="#sec-data" class="category-link block text-sm text-on-surface-variant py-1 px-2 rounded">📊 データの分析</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- メインコンテンツ -->
+  <main class="flex-1 md:ml-64 p-margin-mobile md:p-margin-desktop bg-surface-bright">
+    <div class="max-w-[800px] mx-auto">
+      
+      <!-- ヒーロー -->
+      <header class="mb-stack-lg section-fade">
+        <h1 class="font-display-lg-mobile md:text-5xl font-bold mb-stack-sm text-primary">数学Ⅰ ビジュアル公式集</h1>
+        <p class="font-body-lg text-on-surface-variant max-w-2xl">教科書レベルの重要公式を、美麗な数式表示と直感的な図解で整理しました。試験前の確認や深い理解に活用してください。</p>
+      </header>
+
+      <!-- ========================================
+           1. 数と式
+      ========================================= -->
+      <section class="mb-stack-lg section-fade" id="sec-expressions" data-formula-section>
+        <div class="flex items-center gap-stack-sm mb-stack-md">
+          <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">calculate</span>
+          <h2 class="font-headline-md text-headline-md">数と式：展開と因数分解</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+
+          <!-- 展開公式 -->
+          <div class="math-card rounded-xl border border-surface-variant p-stack-md" data-formula-card>
+            <h3 class="font-bold text-primary mb-stack-sm">展開の公式（基本）</h3>
+            <div class="formula-display mb-stack-md">
+              $$(a + b)^2 = a^2 + 2ab + b^2$$
+              $$(a - b)^2 = a^2 - 2ab + b^2$$
+              $$(a + b)(a - b) = a^2 - b^2$$
+            </div>
+            <div class="diagram-container h-32 rounded-lg border border-outline-variant flex items-center justify-center relative overflow-hidden">
+              <div class="grid grid-cols-2 grid-rows-2 w-24 h-24 border-2 border-primary">
+                <div class="bg-primary/10 border border-primary/20 flex items-center justify-center text-xs font-bold">$a^2$</div>
+                <div class="bg-secondary/10 border border-primary/20 flex items-center justify-center text-xs font-bold">$ab$</div>
+                <div class="bg-secondary/10 border border-primary/20 flex items-center justify-center text-xs font-bold">$ab$</div>
+                <div class="bg-tertiary/10 border border-primary/20 flex items-center justify-center text-xs font-bold">$b^2$</div>
+              </div>
+              <span class="absolute bottom-2 right-2 text-xs text-on-surface-variant">面積モデルによる視覚化</span>
+            </div>
+          </div>
+
+          <!-- 因数分解 -->
+          <div class="math-card rounded-xl border border-surface-variant p-stack-md" data-formula-card>
+            <h3 class="font-bold text-primary mb-stack-sm">因数分解の公式</h3>
+            <div class="formula-display mb-stack-md">
+              $$x^2 + (a+b)x + ab = (x+a)(x+b)$$
+              $$a^3 + b^3 = (a+b)(a^2 - ab + b^2)$$
+              $$a^3 - b^3 = (a-b)(a^2 + ab + b^2)$$
+            </div>
+            <div class="text-label-sm font-label-sm text-on-surface-variant p-2 bg-surface-container-low rounded-lg">
+              💡 立方和・立方差の中央項の符号に注意！
+            </div>
+          </div>
+
+          <!-- 不等式 -->
+          <div class="math-card rounded-xl border border-surface-variant p-stack-md md:col-span-2" data-formula-card>
+            <h3 class="font-bold text-primary mb-stack-sm">一次不等式の性質</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="formula-display text-base">
+                $a < b \Rightarrow a + c < b + c$
+                <div class="text-xs text-on-surface-variant mt-1">両辺に同じ数を加えても不等号の向きは変わらない</div>
+              </div>
+              <div class="formula-display text-base">
+                $a < b, c > 0 \Rightarrow ac < bc$
+                <div class="text-xs text-on-surface-variant mt-1">正の数を掛けると向きは変わらない</div>
+              </div>
+              <div class="formula-display text-base" style="border-left:3px solid #ef4444;">
+                $a < b, c < 0 \Rightarrow ac > bc$
+                <div class="text-xs text-error mt-1 font-bold">負の数を掛けると向きが逆転！</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================
+           2. 集合と命題
+      ========================================= -->
+      <section class="mb-stack-lg section-fade" id="sec-sets" data-formula-section>
+        <div class="flex items-center gap-stack-sm mb-stack-md">
+          <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">hub</span>
+          <h2 class="font-headline-md text-headline-md">集合と命題</h2>
+        </div>
+        <div class="space-y-gutter">
+
+          <!-- 集合の基本記号 -->
+          <div class="math-card rounded-xl border border-surface-variant p-stack-md" data-formula-card>
+            <h3 class="font-bold text-primary mb-stack-sm">集合の基本記号と表し方</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="space-y-2 text-sm">
+                <div class="flex items-center gap-3 p-2 bg-surface-container-low rounded">
+                  <span class="font-label-sm font-bold w-16 shrink-0 text-center text-primary">$a \in A$</span>
+                  <span>$a$ は集合 $A$ の<strong>要素</strong>である</span>
+                </div>
+                <div class="flex items-center gap-3 p-2 bg-surface-container-low rounded">
+                  <span class="font-label-sm font-bold w-16 shrink-0 text-center text-primary">$a \notin A$</span>
+                  <span>$a$ は集合 $A$ の要素でない</span>
+                </div>
+                <div class="flex items-center gap-3 p-2 bg-surface-container-low rounded">
+                  <span class="font-label-sm font-bold w-16 shrink-0 text-center text-primary">$A \subset B$</span>
+                  <span>$A$ は $B$ の<strong>部分集合</strong>（$A \subseteq B$）</span>
+                </div>
+                <div class="flex items-center gap-3 p-2 bg-surface-container-low rounded">
+                  <span class="font-label-sm font-bold w-16 shrink-0 text-center text-primary">$\emptyset$</span>
+                  <span><strong>空集合</strong>（要素を1つも持たない集合）</span>
+                </div>
+              </div>
+              <div class="space-y-2 text-sm">
+                <div class="flex items-center gap-3 p-2 bg-blue-50 rounded border border-blue-200">
+                  <span class="font-label-sm font-bold w-16 shrink-0 text-center text-primary">$A \cap B$</span>
+                  <span><strong>共通部分（積集合）</strong>：$A$ にも $B$ にも属す</span>
+                </div>
+                <div class="flex items-center gap-3 p-2 bg-green-50 rounded border border-green-200">
+                  <span class="font-label-sm font-bold w-16 shrink-0 text-center text-tertiary">$A \cup B$</span>
+                  <span><strong>和集合</strong>：$A$ または $B$ に属す</span>
+                </div>
+                <div class="flex items-center gap-3 p-2 bg-orange-50 rounded border border-orange-200">
+                  <span class="font-label-sm font-bold w-16 shrink-0 text-center" style="color:#8f4e00">$\overline{A}$</span>
+                  <span><strong>補集合</strong>：全体集合 $U$ の中で $A$ に属さない要素全体</span>
+                </div>
+                <div class="flex items-center gap-3 p-2 bg-surface-container-low rounded">
+                  <span class="font-label-sm font-bold w-16 shrink-0 text-center text-primary">$n(A)$</span>
+                  <span>集合 $A$ の<strong>要素の個数</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 要素の個数の公式 -->
+          <div class="math-card rounded-xl border-l-4 border-l-primary p-stack-lg" data-formula-card>
+            <h3 class="font-headline-md text-primary mb-stack-md">要素の個数の公式（加法定理）</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg">
+              <div>
+                <div class="formula-display mb-1">
+                  $$n(A \cup B) = n(A) + n(B) - n(A \cap B)$$
+                </div>
+                <p class="text-sm text-on-surface-variant mb-3 px-1">$A$ と $B$ の重なり分を1回引く。</p>
+                <div class="formula-display mb-1">
+                  $$n(\overline{A}) = n(U) - n(A)$$
+                </div>
+                <p class="text-sm text-on-surface-variant px-1">全体から $A$ を引いた残りが補集合。</p>
+              </div>
+              <!-- ベン図 -->
+              <div class="flex flex-col items-center justify-center bg-surface-container-low rounded-xl p-4">
+                <svg viewBox="0 0 160 100" class="w-48 h-32">
+                  <!-- U の枠 -->
+                  <rect x="2" y="2" width="156" height="96" rx="8" fill="none" stroke="#c0c7d4" stroke-width="1.5"/>
+                  <text x="148" y="14" font-size="9" fill="#707783">U</text>
+                  <!-- A 円 -->
+                  <circle cx="60" cy="50" r="35" fill="rgba(0,94,164,0.15)" stroke="#005ea4" stroke-width="2"/>
+                  <!-- B 円 -->
+                  <circle cx="100" cy="50" r="35" fill="rgba(0,107,27,0.15)" stroke="#006b1b" stroke-width="2"/>
+                  <!-- 交差部分 -->
+                  <text x="38" y="53" font-size="11" fill="#005ea4" font-weight="bold">A</text>
+                  <text x="112" y="53" font-size="11" fill="#006b1b" font-weight="bold">B</text>
+                  <text x="74" y="53" font-size="9" fill="#333" text-anchor="middle">A∩B</text>
+                  <text x="22" y="88" font-size="8" fill="#c0c7d4">補集合</text>
+                </svg>
+                <p class="text-xs text-on-surface-variant mt-2 text-center">ベン図：2集合の関係</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ド・モルガンの法則 -->
+          <div class="math-card rounded-xl border border-surface-variant p-stack-md" data-formula-card>
+            <h3 class="font-bold text-primary mb-stack-sm">ド・モルガンの法則</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <div class="formula-display">
+                  $$\overline{A \cap B} = \overline{A} \cup \overline{B}$$
+                </div>
+                <p class="text-xs text-on-surface-variant mt-2 px-1">
+                  「$A$ かつ $B$」でない ＝「$A$ でない」または「$B$ でない」
+                </p>
+              </div>
+              <div>
+                <div class="formula-display">
+                  $$\overline{A \cup B} = \overline{A} \cap \overline{B}$$
+                </div>
+                <p class="text-xs text-on-surface-variant mt-2 px-1">
+                  「$A$ または $B$」でない ＝「$A$ でない」かつ「$B$ でない」
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 命題 -->
+          <div class="math-card rounded-xl border-l-4 border-l-secondary-container p-stack-lg" data-formula-card>
+            <h3 class="font-headline-md text-primary mb-stack-md">命題と真偽・逆・裏・対偶</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg">
+              <div>
+                <p class="text-sm font-bold mb-3">「$p$ ならば $q$」（$p \Rightarrow q$）に対して：</p>
+                <div class="space-y-2 text-sm">
+                  <div class="flex items-center gap-2 p-2 bg-surface-container-low rounded">
+                    <span class="font-label-sm font-bold text-primary w-12">逆</span>
+                    <span>$q \Rightarrow p$</span>
+                    <span class="text-on-surface-variant ml-auto text-xs shrink-0">真偽は元と無関係</span>
+                  </div>
+                  <div class="flex items-center gap-2 p-2 bg-surface-container-low rounded">
+                    <span class="font-label-sm font-bold w-12" style="color:#8f4e00">裏</span>
+                    <span>$\overline{p} \Rightarrow \overline{q}$</span>
+                    <span class="text-on-surface-variant ml-auto text-xs shrink-0">真偽は元と無関係</span>
+                  </div>
+                  <div class="flex items-center gap-2 p-2 bg-green-50 border border-green-200 rounded">
+                    <span class="font-label-sm font-bold text-tertiary w-12">対偶</span>
+                    <span>$\overline{q} \Rightarrow \overline{p}$</span>
+                    <span class="text-tertiary ml-auto text-xs font-bold shrink-0">元と同値 ✓</span>
+                  </div>
+                </div>
+                <div class="mt-3 p-3 bg-amber-50 border border-amber-200 rounded text-sm space-y-1">
+                  <div class="font-bold">💡 対偶を使った証明</div>
+                  <div>「$p \Rightarrow q$」を直接示しにくいとき、同値な対偶「$\overline{q} \Rightarrow \overline{p}$」を代わりに示す。</div>
+                </div>
+              </div>
+              <!-- 図解 -->
+              <div class="bg-surface-container-low rounded-xl p-4 text-sm">
+                <p class="font-bold mb-3 text-center">真偽の関係まとめ</p>
+                <table class="w-full text-center text-xs border-collapse">
+                  <thead>
+                    <tr class="bg-primary text-white">
+                      <th class="p-1 border border-white">元の命題</th>
+                      <th class="p-1 border border-white">逆</th>
+                      <th class="p-1 border border-white">裏</th>
+                      <th class="p-1 border border-white">対偶</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="bg-green-50">
+                      <td class="p-1 border border-outline-variant text-green-700 font-bold">真</td>
+                      <td class="p-1 border border-outline-variant">不定</td>
+                      <td class="p-1 border border-outline-variant">不定</td>
+                      <td class="p-1 border border-outline-variant text-green-700 font-bold">真</td>
+                    </tr>
+                    <tr class="bg-red-50">
+                      <td class="p-1 border border-outline-variant text-red-600 font-bold">偽</td>
+                      <td class="p-1 border border-outline-variant">不定</td>
+                      <td class="p-1 border border-outline-variant">不定</td>
+                      <td class="p-1 border border-outline-variant text-red-600 font-bold">偽</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p class="text-xs text-on-surface-variant mt-2 text-center">「逆」と「裏」は互いに対偶関係</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 必要条件・十分条件 -->
+          <div class="math-card rounded-xl border border-surface-variant p-stack-md" data-formula-card>
+            <h3 class="font-bold text-primary mb-stack-sm">必要条件・十分条件・必要十分条件</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+              <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg flex flex-col gap-2">
+                <div class="text-center font-bold text-primary text-sm">$p \Rightarrow q$ が真のとき</div>
+                <div class="formula-display text-base py-2" style="background:rgba(0,94,164,0.06);">
+                  $p$ は $q$ の <strong>十分条件</strong>
+                </div>
+                <div class="text-xs text-on-surface-variant text-center">（逆に）$q$ は $p$ の必要条件</div>
+              </div>
+              <div class="p-3 bg-green-50 border border-green-200 rounded-lg flex flex-col gap-2">
+                <div class="text-center font-bold text-tertiary text-sm">$q \Rightarrow p$ が真のとき</div>
+                <div class="formula-display text-base py-2" style="background:rgba(0,107,27,0.06);">
+                  $p$ は $q$ の <strong>必要条件</strong>
+                </div>
+                <div class="text-xs text-on-surface-variant text-center">（逆に）$q$ は $p$ の十分条件</div>
+              </div>
+              <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg flex flex-col gap-2">
+                <div class="text-center font-bold text-sm" style="color:#8f4e00;">両方向が真のとき</div>
+                <div class="formula-display text-base py-2" style="background:rgba(143,78,0,0.06);">
+                  $p \Leftrightarrow q$　<strong>必要十分条件</strong>
+                </div>
+                <div class="text-xs text-on-surface-variant text-center">$p$ と $q$ は同値</div>
+              </div>
+            </div>
+            <div class="mt-3 p-3 bg-surface-container-low rounded text-sm">
+              <strong>例：</strong>「$x = 2$」は「$x^2 = 4$」の<span class="text-primary font-bold">十分条件</span>（逆は $x = -2$ の反例あり）
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ========================================
+           3. 2次関数（元の「2.」から番号繰り下げ）
+      ========================================= -->
+      <section class="mb-stack-lg section-fade" id="sec-quadratic" data-formula-section>
+        <div class="flex items-center gap-stack-sm mb-stack-md">
+          <span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1;">show_chart</span>
+          <h2 class="font-headline-md text-headline-md">2次関数</h2>
+        </div>
+        <div class="space-y-gutter">
+
+          <!-- 標準形 -->
+          <div class="math-card p-stack-lg rounded-xl border-l-4 border-l-primary" data-formula-card>
+            <h3 class="font-headline-md text-primary mb-stack-md">標準形と頂点</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg">
+              <div>
+                <div class="formula-display mb-4">
+                  $$y = a(x - p)^2 + q$$
+                </div>
+                <ul class="space-y-2 text-body-md">
+                  <li class="flex gap-2"><span class="material-symbols-outlined text-primary text-lg">check_circle</span>頂点の座標は $(p, q)$、$a$ で開き方が変わる</li>
+                  <li class="flex gap-2"><span class="material-symbols-outlined text-primary text-lg">check_circle</span>軸の方程式：$x = p$</li>
+                  <li class="flex gap-2"><span class="material-symbols-outlined text-error text-lg">warning</span>符号注意：$x-p$ の $p$ は頂点の $x$ 座標</li>
+                </ul>
+              </div>
+              <!-- インタラクティブグラフ -->
+              <div class="diagram-container rounded-xl border border-outline-variant p-3 flex flex-col">
+                <div class="text-xs font-bold text-on-surface-variant mb-2">インタラクティブ：a, p, q を動かす</div>
+                <div class="flex flex-wrap gap-3 mb-2 text-sm">
+                  <label class="flex items-center gap-2">a: <input type="range" id="a-slider" min="-3" max="3" step="1" value="1" class="w-16">
+                    <span id="a-val" class="font-label-sm font-bold w-5">1</span>
+                  </label>
+                  <label class="flex items-center gap-2">p: <input type="range" id="p-slider" min="-4" max="4" value="1" class="w-16">
+                    <span id="p-val" class="font-label-sm font-bold w-5">1</span>
+                  </label>
+                  <label class="flex items-center gap-2">q: <input type="range" id="q-slider" min="-4" max="4" value="1" class="w-16">
+                    <span id="q-val" class="font-label-sm font-bold w-5">1</span>
+                  </label>
+                </div>
+                <svg id="quad-graph" viewBox="-5 -5 10 10" class="flex-1 rounded-lg bg-white border border-outline-variant" style="min-height:120px;">
+                  <!-- Grid -->
+                  <line x1="-5" y1="0" x2="5" y2="0" stroke="#ccc" stroke-width="0.1"/>
+                  <line x1="0" y1="-5" x2="0" y2="5" stroke="#ccc" stroke-width="0.1"/>
+                  <!-- Axis labels -->
+                  <text x="4.5" y="-0.3" font-size="0.6" fill="#707783">x</text>
+                  <text x="0.2" y="-4.5" font-size="0.6" fill="#707783">y</text>
+                  <!-- Parabola path -->
+                  <path id="parabola-path" stroke="#005ea4" stroke-width="0.15" fill="none"/>
+                  <!-- Vertex dot -->
+                  <circle id="vertex-dot" r="0.2" fill="#ff8f06"/>
+                  <!-- Axis line -->
+                  <line id="axis-line" stroke="#ff8f06" stroke-width="0.08" stroke-dasharray="0.3,0.2"/>
+                </svg>
+                <div class="text-xs text-center mt-1 font-label-sm text-primary" id="vertex-label">y = (x - 1)² + 1</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 判別式・解の公式 -->
+          <div class="math-card p-stack-md rounded-xl border border-surface-variant" data-formula-card>
+            <h3 class="font-bold text-primary mb-stack-sm">解の公式と判別式</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p class="text-sm text-on-surface-variant mb-2 font-semibold">解の公式</p>
+                <div class="formula-display">
+                  $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
+                </div>
+              </div>
+              <div>
+                <p class="text-sm text-on-surface-variant mb-2 font-semibold">判別式 $D = b^2 - 4ac$</p>
+                <div class="space-y-2 text-sm">
+                  <div class="flex items-center gap-2 p-2 bg-green-50 rounded border border-green-200">
+                    <span class="font-bold text-green-700">$D > 0$</span><span>異なる2つの実数解</span>
+                  </div>
+                  <div class="flex items-center gap-2 p-2 bg-blue-50 rounded border border-blue-200">
+                    <span class="font-bold text-blue-700">$D = 0$</span><span>重解（1つの実数解）</span>
+                  </div>
+                  <div class="flex items-center gap-2 p-2 bg-red-50 rounded border border-red-200">
+                    <span class="font-bold text-red-700">$D < 0$</span><span>実数解なし</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================
+           3. 図形と計量（三角比）
+      ========================================= -->
+      <section class="mb-stack-lg section-fade" id="sec-trig" data-formula-section>
+        <div class="flex items-center gap-stack-sm mb-stack-md">
+          <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">change_history</span>
+          <h2 class="font-headline-md text-headline-md">図形と計量：三角比</h2>
+        </div>
+        <div class="space-y-gutter">
+
+          <!-- 正弦定理 -->
+          <div class="math-card p-stack-lg rounded-xl border-l-4 border-l-secondary-container" data-formula-card>
+            <div class="flex flex-col md:flex-row gap-stack-lg">
+              <div class="flex-1">
+                <h3 class="font-headline-md text-primary mb-stack-md">正弦定理 (Sine Rule)</h3>
+                <div class="bg-surface-container-highest rounded-lg p-stack-md mb-stack-md flex items-center justify-center">
+                  <div class="formula-display" style="background:transparent;">
+                    $$\frac{a}{\sin A} = \frac{b}{\sin B} = \frac{c}{\sin C} = 2R$$
+                  </div>
+                </div>
+                <ul class="space-y-2">
+                  <li class="flex items-start gap-2 text-body-md"><span class="material-symbols-outlined text-primary text-lg mt-0.5">check_circle</span>外接円の半径 $R$ との関係を示す</li>
+                  <li class="flex items-start gap-2 text-body-md"><span class="material-symbols-outlined text-primary text-lg mt-0.5">check_circle</span>2辺と対角、または2角と辺が既知の場合に有効</li>
+                </ul>
+              </div>
+              <div class="w-full md:w-56 diagram-container rounded-xl border border-outline-variant flex flex-col items-center justify-center p-4">
+                <svg class="w-36 h-36" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" fill="none" r="45" stroke="#005ea4" stroke-dasharray="2,2" stroke-width="0.8"/>
+                  <path d="M50 5 L10 78 L90 78 Z" fill="none" stroke="#005ea4" stroke-width="2"/>
+                  <text font-size="8" x="47" y="15" fill="#005ea4" font-weight="bold">A</text>
+                  <text font-size="8" x="4" y="86" fill="#005ea4" font-weight="bold">B</text>
+                  <text font-size="8" x="88" y="86" fill="#005ea4" font-weight="bold">C</text>
+                  <line stroke="#ff8f06" stroke-width="1.5" x1="50" x2="95" y1="50" y2="50"/>
+                  <text font-size="8" x="65" y="45" fill="#8f4e00" font-weight="bold">R</text>
+                  <circle cx="50" cy="50" r="1.5" fill="#ff8f06"/>
+                </svg>
+                <span class="mt-2 text-label-sm text-on-surface-variant text-xs">外接円との関係</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 余弦定理 -->
+          <div class="math-card p-stack-lg rounded-xl border border-surface-variant" data-formula-card>
+            <h3 class="font-headline-md text-primary mb-stack-md">余弦定理 (Cosine Rule)</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg">
+              <div class="bg-surface-container-low rounded-lg p-stack-md flex items-center justify-center">
+                <div class="formula-display" style="background:transparent;">
+                  $$a^2 = b^2 + c^2 - 2bc\cos A$$
+                </div>
+              </div>
+              <div class="bg-surface-container-low rounded-lg p-stack-md flex items-center justify-center">
+                <div class="formula-display" style="background:transparent;">
+                  $$\cos A = \frac{b^2 + c^2 - a^2}{2bc}$$
+                </div>
+              </div>
+            </div>
+            <p class="text-sm text-on-surface-variant mt-3">💡 3辺既知または2辺と夾角が既知の場合に利用します。</p>
+          </div>
+
+          <!-- 三角比の相互関係 -->
+          <div class="math-card p-stack-md rounded-xl border border-surface-variant" data-formula-card>
+            <h3 class="font-bold text-primary mb-stack-sm">三角比の相互関係</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div class="formula-display text-base">
+                $$\sin^2\theta + \cos^2\theta = 1$$
+              </div>
+              <div class="formula-display text-base">
+                $$\tan\theta = \frac{\sin\theta}{\cos\theta}$$
+              </div>
+              <div class="formula-display text-base">
+                $$1 + \tan^2\theta = \frac{1}{\cos^2\theta}$$
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================
+           4. データの分析
+      ========================================= -->
+      <section class="mb-stack-lg section-fade" id="sec-data" data-formula-section>
+        <div class="flex items-center gap-stack-sm mb-stack-md">
+          <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">insights</span>
+          <h2 class="font-headline-md text-headline-md">データの分析</h2>
+        </div>
+        <div class="space-y-gutter">
+          
+          <!-- 代表値・分散・標準偏差 -->
+          <div class="math-card overflow-hidden rounded-xl border border-surface-variant" data-formula-card>
+            <div class="grid grid-cols-1 md:grid-cols-2">
+              <div class="p-stack-lg border-r border-surface-variant">
+                <h3 class="font-bold text-primary mb-stack-md">分散と標準偏差</h3>
+                <div class="formula-display mb-3">
+                  $$s^2 = \frac{1}{n}\sum_{i=1}^{n}(x_i - \bar{x})^2$$
+                </div>
+                <div class="formula-display">
+                  $$s = \sqrt{s^2} \quad \text{（標準偏差）}$$
+                </div>
+                <p class="text-xs text-on-surface-variant mt-2">$\bar{x}$: 平均値、$n$: データ数</p>
+              </div>
+              <div class="p-stack-lg bg-surface-container-lowest">
+                <h3 class="font-bold text-primary mb-stack-sm">相関係数の公式</h3>
+                <div class="bg-white rounded-lg p-stack-md shadow-sm mb-stack-md flex justify-center border border-outline-variant">
+                  <div class="formula-display" style="background:transparent;">
+                    $$r = \frac{s_{xy}}{s_x s_y}$$
+                  </div>
+                </div>
+                <div class="text-label-sm space-y-2 text-sm">
+                  <p class="flex justify-between"><span>$s_{xy}$: 共分散</span><span class="text-on-surface-variant">Covariance</span></p>
+                  <p class="flex justify-between"><span>$s_x, s_y$: 標準偏差</span><span class="text-on-surface-variant">Standard Deviation</span></p>
+                  <p class="flex justify-between"><span>$-1 \leq r \leq 1$</span><span class="text-on-surface-variant">範囲</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 散布図と相関 -->
+          <div class="math-card p-stack-md rounded-xl border border-surface-variant" data-formula-card>
+            <h3 class="font-bold text-primary mb-stack-md">相関係数 $r$ と散布図の見方</h3>
+            <div class="grid grid-cols-3 gap-4">
+              <div class="text-center">
+                <svg viewBox="0 0 60 60" class="w-full h-20 bg-surface-container-low rounded">
+                  <circle cx="10" cy="50" r="2.5" fill="#005ea4"/><circle cx="20" cy="38" r="2.5" fill="#005ea4"/>
+                  <circle cx="30" cy="28" r="2.5" fill="#005ea4"/><circle cx="40" cy="18" r="2.5" fill="#005ea4"/>
+                  <circle cx="50" cy="10" r="2.5" fill="#005ea4"/>
+                  <line x1="5" y1="55" x2="55" y2="5" stroke="#005ea4" stroke-width="1" stroke-dasharray="2"/>
+                </svg>
+                <div class="text-sm font-bold text-primary mt-1">正の相関</div>
+                <div class="text-xs text-on-surface-variant">$0 &lt; r \leq 1$</div>
+              </div>
+              <div class="text-center">
+                <svg viewBox="0 0 60 60" class="w-full h-20 bg-surface-container-low rounded">
+                  <circle cx="10" cy="20" r="2.5" fill="#707783"/><circle cx="25" cy="45" r="2.5" fill="#707783"/>
+                  <circle cx="30" cy="15" r="2.5" fill="#707783"/><circle cx="45" cy="38" r="2.5" fill="#707783"/>
+                  <circle cx="50" cy="25" r="2.5" fill="#707783"/>
+                </svg>
+                <div class="text-sm font-bold text-on-surface-variant mt-1">相関なし</div>
+                <div class="text-xs text-on-surface-variant">$r \approx 0$</div>
+              </div>
+              <div class="text-center">
+                <svg viewBox="0 0 60 60" class="w-full h-20 bg-surface-container-low rounded">
+                  <circle cx="10" cy="10" r="2.5" fill="#ba1a1a"/><circle cx="20" cy="20" r="2.5" fill="#ba1a1a"/>
+                  <circle cx="30" cy="32" r="2.5" fill="#ba1a1a"/><circle cx="40" cy="42" r="2.5" fill="#ba1a1a"/>
+                  <circle cx="50" cy="50" r="2.5" fill="#ba1a1a"/>
+                  <line x1="5" y1="5" x2="55" y2="55" stroke="#ba1a1a" stroke-width="1" stroke-dasharray="2"/>
+                </svg>
+                <div class="text-sm font-bold text-error mt-1">負の相関</div>
+                <div class="text-xs text-on-surface-variant">$-1 \leq r &lt; 0$</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- フッター -->
+      <footer class="py-stack-lg flex flex-col md:flex-row justify-between items-center border-t border-outline-variant">
+        <div>
+          <span class="font-bold text-primary">Universal Math Ⅰ</span>
+          <p class="font-label-sm text-on-surface-variant mt-1">© 2024 Universal Mathematics Ⅰ</p>
+        </div>
+        <div class="flex gap-gutter mt-4 md:mt-0">
+          <a href="index.html" class="font-label-sm text-on-surface-variant hover:underline">学習する</a>
+          <a href="dashboard.html" class="font-label-sm text-on-surface-variant hover:underline">学習カルテ</a>
+        </div>
+      </footer>
+    </div>
+  </main>
+</div>
+
+<!-- モバイルボトムナビ -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-low border-t border-outline-variant flex z-40" style="padding-bottom:env(safe-area-inset-bottom);">
+  <a href="index.html" class="flex-1 flex flex-col items-center py-2 text-on-surface-variant">
+    <span class="material-symbols-outlined">menu_book</span><span class="text-xs">学習</span>
+  </a>
+  <a href="dashboard.html" class="flex-1 flex flex-col items-center py-2 text-on-surface-variant">
+    <span class="material-symbols-outlined">dashboard</span><span class="text-xs">カルテ</span>
+  </a>
+  <a href="formula.html" class="flex-1 flex flex-col items-center py-2 text-primary font-bold">
+    <span class="material-symbols-outlined">function</span><span class="text-xs">公式集</span>
+  </a>
+</nav>
+<div class="md:hidden" style="height:60px;"></div>
+
+<script>
+// インタラクティブ放物線グラフ
+(function() {
+  const pSlider = document.getElementById('p-slider');
+  const qSlider = document.getElementById('q-slider');
+  const pVal = document.getElementById('p-val');
+  const qVal = document.getElementById('q-val');
+  const path = document.getElementById('parabola-path');
+  const dot = document.getElementById('vertex-dot');
+  const axisLine = document.getElementById('axis-line');
+  const label = document.getElementById('vertex-label');
+
+  const aSlider = document.getElementById('a-slider');
+  const aVal = document.getElementById('a-val');
+
+  function update() {
+    const aRaw = parseInt(aSlider ? aSlider.value : 1);
+    const a = aRaw === 0 ? 0.5 : aRaw; // 0のときは0.5に
+    const p = parseFloat(pSlider.value);
+    const q = parseFloat(qSlider.value);
+    if (aVal) aVal.textContent = aRaw === 0 ? '0' : aRaw;
+    pVal.textContent = p;
+    qVal.textContent = q;
+
+    // Parabola color changes with a sign
+    const strokeColor = a > 0 ? '#005ea4' : '#ef4444';
+    if (path) path.setAttribute('stroke', strokeColor);
+
+    // Build SVG path for y = a(x-p)^2 + q
+    let d = '';
+    let first = true;
+    for (let xi = -5; xi <= 5; xi += 0.05) {
+      const yi = a * (xi - p) * (xi - p) + q;
+      const svgY = -yi; // SVG Y is inverted
+      if (svgY < -5.5 || svgY > 5.5) { first = true; continue; }
+      if (first) { d += `M ${xi.toFixed(2)} ${svgY.toFixed(2)}`; first = false; }
+      else d += ` L ${xi.toFixed(2)} ${svgY.toFixed(2)}`;
+    }
+    path.setAttribute('d', d);
+    dot.setAttribute('cx', p);
+    dot.setAttribute('cy', -q);
+    axisLine.setAttribute('x1', p); axisLine.setAttribute('x2', p);
+    axisLine.setAttribute('y1', -5); axisLine.setAttribute('y2', 5);
+    // 式を更新
+    const pSign = p > 0 ? `- ${p}` : p < 0 ? `+ ${Math.abs(p)}` : '';
+    const qSign = q >= 0 ? `+ ${q}` : `- ${Math.abs(q)}`;
+    const aStr = a === 1 ? '' : a === -1 ? '-' : String(a);
+    label.textContent = `y = ${aStr}(x ${pSign || ''})² ${qSign}`;
+  }
+
+  if (pSlider && qSlider) {
+    if (aSlider) aSlider.addEventListener('input', update);
+    pSlider.addEventListener('input', update);
+    qSlider.addEventListener('input', update);
+    update();
+  }
+})();
+
+// 公式検索
+(function() {
+  const search = document.getElementById('formula-search');
+  if (!search) return;
+  search.addEventListener('input', function() {
+    const q = this.value.trim().toLowerCase();
+    document.querySelectorAll('[data-formula-card]').forEach(card => {
+      const text = card.textContent.toLowerCase();
+      card.classList.toggle('formula-hidden', q.length > 0 && !text.includes(q));
+    });
+    document.querySelectorAll('[data-formula-section]').forEach(sec => {
+      const cards = sec.querySelectorAll('[data-formula-card]');
+      const allHidden = Array.from(cards).every(c => c.classList.contains('formula-hidden'));
+      sec.style.display = (q.length > 0 && allHidden) ? 'none' : '';
+    });
+  });
+})();
+
+// スクロール時のヘッダーシャドウ
+window.addEventListener('scroll', () => {
+  document.querySelector('header').classList.toggle('shadow-md', window.scrollY > 10);
+});
+</script>
+<script>
+// ==========================================
+// テーマ管理（全ページ共通）
+// ==========================================
+(function() {
+  const THEME_KEY = 'math_app_theme';
+
+  function applyTheme(theme) {
+    document.body.className = document.body.className.replace(/theme-\w+/g, '').trim() + ' theme-' + theme;
+    if (theme === 'dark') document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
+    document.querySelectorAll('.theme-btn').forEach(b => {
+      const isActive = b.dataset.theme === theme;
+      b.classList.toggle('active', isActive);
+      b.classList.toggle('bg-white', isActive);
+      b.classList.toggle('shadow', isActive);
+      b.setAttribute('aria-checked', isActive ? 'true' : 'false');
+    });
+  }
+
+  // 保存済みテーマの即時復元（DOM構築前でも動く）
+  const saved = localStorage.getItem(THEME_KEY) || 'light';
+  applyTheme(saved);
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const theme = this.dataset.theme;
+        localStorage.setItem(THEME_KEY, theme);
+        applyTheme(theme);
+      });
+    });
+    // DOMContentLoaded後に再適用（ボタンのactiveも確実に反映）
+    applyTheme(localStorage.getItem(THEME_KEY) || 'light');
+  });
+})();
+</script>
+</body>
+</html>
